@@ -1,4 +1,4 @@
-package de.htwg.msi.go
+package de.htwg.msi
 
 @main
 def main(): Unit = {
