@@ -9,7 +9,7 @@ def main(args: String*): Unit = {
   val controller: GameController = GameController();
   val tui: Tui = Tui(controller);
   var input: String = "";
-  if (args.length > 0) input = args(0);
+  if (args.nonEmpty) input = args(0);
   if (input.nonEmpty) {
     tui.processInputLine(input)
   } else {
