@@ -7,3 +7,8 @@ lazy val root = (project in file("."))
     name := "Go",
     idePackagePrefix := Some("de.htwg.msi.go")
   )
+  .settings(
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % "test"
+  )
+  
