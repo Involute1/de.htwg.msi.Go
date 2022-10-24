@@ -1,6 +1,6 @@
 package de.htwg.msi.go
 package view
 
-class TuiTest {
+class TuiTest extends AnyWordSpec {
 
 }

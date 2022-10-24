@@ -1,6 +1,6 @@
 package de.htwg.msi.go
 package model
 
-class Field(xCordinate: String, yCordinate: String, hasStone: Boolean) {
+class Field(xCoordinate: String, yCoordinate: String, StoneColor: PlayerColor) {
 
 }

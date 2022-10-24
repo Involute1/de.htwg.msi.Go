@@ -1,6 +1,6 @@
 package de.htwg.msi.go
 package controller
 
-class GameControllerTest {
+class GameControllerTest extends AnyWordSpec {
 
 }

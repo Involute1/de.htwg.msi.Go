@@ -1,6 +1,6 @@
 package de.htwg.msi.go
 package model
 
-class FieldTest {
+class FieldTest extends AnyWordSpec {
 
 }

@@ -1,5 +1,5 @@
 package de.htwg.msi.go
 
-class GoTest {
+class GoTest extends AnyWordSpec {
 
 }
