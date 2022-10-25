@@ -6,8 +6,8 @@ import org.scoverage.coveralls.Imports.CoverallsKeys._
 lazy val root = (project in file("."))
   .settings(
     name := "Go",
-    coverageEnabled := true,
-    coverallsToken := Some("uEVPhMEA8k14APuYbjGTeQCdcUqbYhGzp")
+    coverageEnabled := true
+//    coverallsToken := Some("uEVPhMEA8k14APuYbjGTeQCdcUqbYhGzp")
   )
   .settings(
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
