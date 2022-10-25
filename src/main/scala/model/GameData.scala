@@ -83,6 +83,16 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int) {
     neighbours.toList
   }
 
+  def getScoreOf(color: PlayerColor): Int = {
+    getFieldsOf(color).size
+  }
+
+  def getFieldsOf(color: PlayerColor): List[Field] = {
+    board.flatten.filter(field => {
+      field.stoneColor.contains(color)
+    })
+  }
+
   /*
   * Recusive aber mit vielen doppelten Aufrufen von Feldern, wodurch liberties nicht direkt berechnet werden können.
 
