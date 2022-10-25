@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/Involute1/de.htwg.msi.Go/badge.svg?branch=master)](https://coveralls.io/github/Involute1/de.htwg.msi.Go?branch=master)
 # GO
 ## Spielregeln
 Alle genutzten Spielregeln
