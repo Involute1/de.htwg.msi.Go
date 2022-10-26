@@ -1,5 +1,4 @@
-package de.htwg.msi.go
-package model
+package de.htwg.msi.model
 
 enum PlayerColor(val shortText: String) {
   case WHITE extends PlayerColor("w")

@@ -1,5 +1,4 @@
-package de.htwg.msi.go
-package model
+package de.htwg.msi.model
 
 case class Field(xCoordinate: Int, yCoordinate: Int, stoneColor: Option[PlayerColor] = None) {
   def hasStone: Boolean = {

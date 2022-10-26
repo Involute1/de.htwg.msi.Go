@@ -1,8 +1,4 @@
-package de.htwg.msi.go
-package model
-
-import model.PlayerColor.WHITE
-import model.PlayerColor.BLACK
+package de.htwg.msi.model
 
 import scala.collection.mutable.ListBuffer
 
@@ -12,9 +8,9 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int) {
     board.flatten.filter(field => {
       !field.hasStone
     }).filter(field => {
-      var otherColor: PlayerColor = WHITE
-      if (stoneColor == WHITE) {
-        otherColor = BLACK
+      var otherColor: PlayerColor = PlayerColor.WHITE
+      if (stoneColor == PlayerColor.WHITE) {
+        otherColor = PlayerColor.BLACK
       }
 
       findChain(field, stoneColor).liberties > 0 || getNeighbourFields(field).exists(neighbourField => {

@@ -1,8 +1,7 @@
-package de.htwg.msi.go
+package de.htwg.msi
 
-import view.Tui
-
-import de.htwg.msi.go.controller.GameController
+import de.htwg.msi.controller.GameController
+import de.htwg.msi.view.Tui
 
 @main
 def main(args: String*): Unit = {
