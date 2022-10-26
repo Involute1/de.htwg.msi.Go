@@ -6,4 +6,6 @@ trait TGameController extends Subject[Any] {
   def eval(input: String): Unit;
   def printGameBoard(): String;
   def printActions(): String;
+  
+  def updateControllerState(nextState: TControllerState): TControllerState;
 }

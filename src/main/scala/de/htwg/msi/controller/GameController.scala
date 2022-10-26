@@ -1,7 +1,7 @@
 package de.htwg.msi.controller
 
 class GameController extends TGameController {
-  val controllerState: TControllerState = PreInitGameState(this)
+  var controllerState: TControllerState = PreInitGameState(this)
   override def eval(input: String): Unit = {
     controllerState.evaluate(input)
     notifyObservers()
@@ -10,6 +10,11 @@ class GameController extends TGameController {
   override def printGameBoard(): String = ???
 
   override def printActions(): String = ???
+
+  override def updateControllerState(nextState: TControllerState): TControllerState = {
+    controllerState = nextState
+    nextState
+  }
 }
 
 trait TControllerState {
@@ -18,16 +23,15 @@ trait TControllerState {
 
 }
 
-case class PreInitGameState(controller: GameController) extends TControllerState {
+case class PreInitGameState(controller: TGameController) extends TControllerState {
   override def evaluate(input: String): Unit = {
     //TODO init gameboard 11x11 9x9 19x19
-
   }
 
   override def nextState: TControllerState = PlayerSetupState(controller)
 }
 
-case class PlayerSetupState(controller: GameController) extends TControllerState {
+case class PlayerSetupState(controller: TGameController) extends TControllerState {
   override def evaluate(input: String): Unit = {
     //TODO init players
   }
