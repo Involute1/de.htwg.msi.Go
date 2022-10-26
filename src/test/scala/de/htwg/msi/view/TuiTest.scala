@@ -1,5 +1,4 @@
-package de.htwg.msi.go
-package view
+package de.htwg.msi.view
 
 import org.scalatest.wordspec.AnyWordSpec
 

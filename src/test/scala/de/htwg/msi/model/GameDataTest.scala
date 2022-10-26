@@ -1,7 +1,7 @@
-package de.htwg.msi.go
-package model
+package de.htwg.msi.model
 
-import model.PlayerColor.*
+import de.htwg.msi.model.PlayerColor
+import de.htwg.msi.model.PlayerColor.{WHITE, BLACK}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -1,5 +1,4 @@
-package de.htwg.msi.go
-package controller
+package de.htwg.msi.controller
 
 import org.scalatest.wordspec.AnyWordSpec
 
