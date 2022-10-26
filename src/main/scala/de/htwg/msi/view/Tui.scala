@@ -13,8 +13,9 @@ class Tui(controller: TGameController) extends Observer[Any] {
     }
   }
 
-  override def receiveUpdate(subject: Any): Boolean = {
-    println("update")
+  override def receiveUpdate(subject: Any, errorMsg: Option[String]): Boolean = {
+    if (errorMsg.isDefined) println(Console.RED + errorMsg.get )
+    println(Console.RESET + controller.getControllerState.getControllerMessage())
     true
   }
 }

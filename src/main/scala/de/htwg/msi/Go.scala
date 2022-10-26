@@ -7,6 +7,7 @@ import de.htwg.msi.view.Tui
 def main(args: String*): Unit = {
   val controller: GameController = GameController();
   val tui: Tui = Tui(controller);
+  controller.notifyObservers(None)
   var input: String = "";
   if (args.nonEmpty) input = args(0);
   if (input.nonEmpty) {

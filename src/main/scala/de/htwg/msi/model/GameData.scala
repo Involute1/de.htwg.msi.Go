@@ -1,8 +1,41 @@
 package de.htwg.msi.model
 
+import de.htwg.msi.model
+
 import scala.collection.mutable.ListBuffer
 
-case class GameData(board: List[List[Field]], turn: Int, playTime: Int) {
+case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players: List[Player]) {
+  def initBoard(input: String): List[List[Field]] = {
+    val boardSize: Option[Int] = isBoardInputValid(input.trim)
+    if (boardSize.isEmpty) {
+      Nil
+    } else {
+      List.tabulate(boardSize.get)(y => List.tabulate(boardSize.get)(x => Field(x, y)))
+    }
+  }
+
+  def isBoardInputValid(input: String): Option[Int] = {
+    input match {
+      case "9" | "9x9" => Some(9)
+      case "10" | "10x10" => Some(10)
+      case "11" | "11x11" => Some(11)
+      case "12" | "12x12" => Some(12)
+      case "13" | "13x13" => Some(13)
+      case "14" | "14x14" => Some(14)
+      case "15" | "15x15" => Some(15)
+      case "16" | "16x16" => Some(16)
+      case "17" | "17x17" => Some(17)
+      case "18" | "18x18" => Some(18)
+      case "19" | "19x19" => Some(19)
+      case _ => None
+    }
+  }
+
+  def initPlayer(input: String): List[Player] = {
+    val isPlayerOne = this.players.isEmpty
+    val player: Player = Player(input, if (isPlayerOne) PlayerColor.BLACK else PlayerColor.WHITE)
+    this.players.::(player)
+  }
 
   def availableMoves(stoneColor: PlayerColor): List[Field] = {
     board.flatten.filter(field => {

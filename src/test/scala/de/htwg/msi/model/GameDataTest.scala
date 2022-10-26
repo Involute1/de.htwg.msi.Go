@@ -13,7 +13,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 1), Field(1, 1), Field(2, 1), Field(3, 1)),
         List(Field(0, 2), Field(1, 2), Field(2, 2), Field(3, 2)),
         List(Field(0, 3), Field(1, 3), Field(2, 3), Field(3, 3))),
-        0, 0)
+        0, 0, Nil)
       "return all fields as available moves for black" in {
         gameData.availableMoves(PlayerColor.BLACK) should contain theSameElementsAs
           List(Field(0, 0), Field(1, 0), Field(2, 0), Field(3, 0),
@@ -42,7 +42,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
         List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
         List(Field(0, 4, Some(WHITE)), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4, Some(WHITE)))),
-        0, 0)
+        0, 0, Nil)
       "not allow that move for black" in {
         gameData.availableMoves(PlayerColor.BLACK) shouldBe empty
       }
@@ -58,7 +58,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
         List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
         List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4))),
-        0, 0)
+        0, 0, Nil)
       "return black chain on findChain" in {
         gameData.findChain(Field(2, 2), BLACK) should be(Chain(Set(Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)),
           Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)),
@@ -75,7 +75,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 2), Field(1, 2, Some(WHITE)), Field(2, 2, Some(BLACK)), Field(3, 2), Field(4, 2, Some(BLACK)), Field(5, 2)),
         List(Field(0, 3, Some(BLACK)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3), Field(5, 3)),
         List(Field(0, 4), Field(1, 4), Field(2, 4), Field(3, 4), Field(4, 4), Field(5, 4))),
-        0, 0)
+        0, 0, Nil)
       "allow that move for black" in {
         gameData.availableMoves(BLACK) should contain(Field(3, 2))
       }
@@ -89,7 +89,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 1, Some(BLACK)), Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(WHITE)), Field(4, 1, Some(WHITE))),
         List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(WHITE)), Field(2, 2, Some(WHITE)), Field(3, 2), Field(4, 2)),
         List(Field(0, 3), Field(1, 3), Field(2, 3), Field(3, 3, Some(WHITE)), Field(4, 3))),
-        0, 0)
+        0, 0, Nil)
       "allow that move for black" in {
         gameData.availableMoves(BLACK) should contain(Field(3, 2))
       }
@@ -105,7 +105,7 @@ class GameDataTest extends AnyWordSpec {
         List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
         List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
         List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4))),
-        0, 0)
+        0, 0, Nil)
       "black has 8 points" in {
         gameData.getScoreOf(PlayerColor.BLACK) shouldBe 8
       }

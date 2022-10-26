@@ -12,4 +12,12 @@ case class Field(xCoordinate: Int, yCoordinate: Int, stoneColor: Option[PlayerCo
     }
 
   }
+  
+  def toPrettyString(): String = {
+    if (this.hasStone) {
+      this.stoneColor.get.shortText
+    } else {
+      "O"
+    }
+  }
 }
