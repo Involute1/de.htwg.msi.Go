@@ -41,15 +41,17 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     board.flatten.filter(field => {
       !field.hasStone
     }).filter(field => {
-      var otherColor: PlayerColor = PlayerColor.WHITE
-      if (stoneColor == PlayerColor.WHITE) {
-        otherColor = PlayerColor.BLACK
-      }
-
+      val otherColor: PlayerColor = if (stoneColor.==(PlayerColor.WHITE)) PlayerColor.BLACK else PlayerColor.WHITE
       findChain(field, stoneColor).liberties > 0 || getNeighbourFields(field).exists(neighbourField => {
         neighbourField.stoneColor.get == otherColor && findChain(neighbourField, otherColor).liberties == 1
       })
     })
+      .sortBy(f => f.xCoordinate)
+  }
+
+  def availableMovesAsString(stoneColor: PlayerColor): String = {
+    val movesList: List[Field] = availableMoves(stoneColor)
+    movesList.map(f => f.toCoordinateString).mkString
   }
 
   /**

@@ -1,9 +1,9 @@
 package de.htwg.msi.controller
 
-import de.htwg.msi.model.{Field, GameData}
+import de.htwg.msi.model.{Field, GameData, Player, PlayerColor}
+import de.htwg.msi.util.Constants.alphabetList
 
 class GameController() extends TGameController {
-  val alphabetList: List[String] = List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
   val gameData: GameData = GameData(Nil, 0, 0, Nil)
   //TODO find way to val this
   var controllerState: TControllerState = InitState(this, gameData)
@@ -17,13 +17,15 @@ class GameController() extends TGameController {
     //TODO make it prettier
     val header: String = ("0"::alphabetList).slice(0, board.length + 1).mkString(" ")
     val empty: String = (" " :: List.fill(board.length)("-")).mkString(" ")
-    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString()).mkString(" "))
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString.mkString(" ")))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 
-  override def printActions(): String = {
-    //TODO
-    """"""
+  override def printActions(playerColor: PlayerColor, currentGameData: GameData): String = {
+    "\r\n" + currentGameData.availableMovesAsString(playerColor) +
+    """
+      |Or type forfeit to forfeit
+      |""".stripMargin
   }
 
   override def updateControllerState(nextState: TControllerState): TControllerState = {
@@ -102,7 +104,8 @@ case class PlayingState(controller: TGameController, gameData: GameData) extends
 
   override def nextState(gameData: GameData): TControllerState = GameOverState(controller)
   override def getControllerMessage(): String = {
-    controller.printGameBoard(gameData.board)
+    val currentPlayer: Player = if (gameData.turn % 2 != 0) gameData.players.head else gameData.players(1)
+    controller.printGameBoard(gameData.board) + controller.printActions(currentPlayer.color, gameData)
   }
 }
 
