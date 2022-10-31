@@ -97,15 +97,20 @@ case class PlayerSetupState(controller: TGameController, gameData: GameData) ext
 
 case class PlayingState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    //TODO place stone
-    // forfeit
-    None
+    val currentPlayer: Player = getCurrentPlayer
+    input match
+      case "forfeit" => None //TODO do forfeit logic
+      case _ => None //TODO place stone
   }
 
   override def nextState(gameData: GameData): TControllerState = GameOverState(controller)
   override def getControllerMessage(): String = {
-    val currentPlayer: Player = if (gameData.turn % 2 != 0) gameData.players.head else gameData.players(1)
+    val currentPlayer: Player = getCurrentPlayer
     controller.printGameBoard(gameData.board) + controller.printActions(currentPlayer.color, gameData)
+  }
+
+  def getCurrentPlayer: Player = {
+    if (gameData.turn % 2 != 0) gameData.players.head else gameData.players(1)
   }
 }
 
