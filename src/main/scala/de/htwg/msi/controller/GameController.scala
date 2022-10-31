@@ -17,12 +17,8 @@ class GameController() extends TGameController {
     //TODO make it prettier
     val header: String = ("0"::alphabetList).slice(0, board.length + 1).mkString(" ")
     val empty: String = (" " :: List.fill(board.length)("-")).mkString(" ")
-    val boardSeq: IndexedSeq[String] = for (row <- board.indices) yield {
-      val legend: String = alphabetList(row) + "|"
-      val rowString: String = board(row).map(e => e.toPrettyString()).mkString(" ")
-      legend + rowString
-    }
-    header + " \r\n" + empty + " \r\n" + boardSeq.mkString("\r\n")
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString()).mkString(" "))
+    header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 
   override def printActions(): String = {
