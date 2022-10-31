@@ -15,9 +15,10 @@ class GameController() extends TGameController {
 
   override def printGameBoard(board: List[List[Field]]): String = {
     //TODO make it prettier
+    //TODO fix output it prints List(...)
     val header: String = ("0"::alphabetList).slice(0, board.length + 1).mkString(" ")
     val empty: String = (" " :: List.fill(board.length)("-")).mkString(" ")
-    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString.mkString(" ")))
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 
