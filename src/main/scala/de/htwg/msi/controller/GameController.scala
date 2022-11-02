@@ -14,11 +14,10 @@ class GameController() extends TGameController {
   }
 
   override def printGameBoard(board: List[List[Field]]): String = {
-    //TODO make it prettier
-    //TODO fix output it prints List(...)
+    //TODO make it prettier?
     val header: String = ("0"::alphabetList).slice(0, board.length + 1).mkString(" ")
     val empty: String = (" " :: List.fill(board.length)("-")).mkString(" ")
-    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString))
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString).mkString(" "))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 
@@ -98,29 +97,77 @@ case class PlayerSetupState(controller: TGameController, gameData: GameData) ext
 
 case class PlayingState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    val currentPlayer: Player = getCurrentPlayer
-    input match
-      case "forfeit" => None //TODO do forfeit logic
-      case _ => None //TODO place stone
+    input match {
+      case "forfeit" =>
+        controller.updateControllerState(nextState(gameData))
+        None
+      case _ =>
+        if (!gameData.isMoveInputValid(input)) return Some("Input invalid try again")
+        val gameDataWithPlacedStone: GameData = gameData.copy(board = gameData.placeStone(input), turn = gameData.turn + 1)
+        controller.updateControllerState(this.copy(gameData = gameDataWithPlacedStone))
+        None
+    }
   }
 
-  override def nextState(gameData: GameData): TControllerState = GameOverState(controller)
+  override def nextState(gameData: GameData): TControllerState = ForfeitState(controller, gameData)
   override def getControllerMessage(): String = {
-    val currentPlayer: Player = getCurrentPlayer
-    controller.printGameBoard(gameData.board) + controller.printActions(currentPlayer.color, gameData)
+    val currentPlayer: Player = gameData.getCurrentPlayer
+    controller.printGameBoard(gameData.board) +
+      """
+        |Player %s enter one of the following:
+        |""".stripMargin.format(currentPlayer.name)
+      + controller.printActions(currentPlayer.color, gameData)
   }
 
-  def getCurrentPlayer: Player = {
-    if (gameData.turn % 2 != 0) gameData.players.head else gameData.players(1)
+
+}
+
+case class ForfeitState(controller: TGameController, gameData: GameData) extends TControllerState {
+  override def evaluate(input: String): Option[String] = {
+    if (input.isEmpty) return Some("Input can´t be empty")
+    input match {
+      case "y" | "yes" => {
+        controller.updateControllerState(nextState(gameData))
+        None
+      }
+      case "n" | "no" => {
+        controller.updateControllerState(PlayingState(controller, gameData))
+        None
+      }
+      case _ => Some("Please type yes or no")
+    }
+  }
+
+  override def nextState(gameData: GameData): TControllerState = GameOverState(controller, gameData)
+
+  override def getControllerMessage(): String = {
+    """
+      |Player %s wants to forfeit
+      |You have to agree to the forfeit in order to end the game
+      |Type yes or no
+      |""".stripMargin.format(gameData.getCurrentPlayer.name)
   }
 }
 
-case class GameOverState(controller: TGameController) extends TControllerState {
+case class GameOverState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    //TODO count score
     None
   }
 
   override def nextState(gameData: GameData): TControllerState = this
-  override def getControllerMessage(): String = ???
+  override def getControllerMessage(): String = {
+    val whiteScore = gameData.getScoreOf(PlayerColor.WHITE)
+    val blackScore = gameData.getScoreOf(PlayerColor.BLACK)
+    val blackPlayer = gameData.players.filter(p => p.color == PlayerColor.BLACK).head
+    val whitePlayer = gameData.players.filter(p => p.color == PlayerColor.WHITE).head
+    if (whiteScore == blackScore) return """Draw"""
+    val winningPlayer: Player = if (whiteScore > blackScore) whitePlayer else blackPlayer
+    """
+      |Score
+      |Player %s: %d
+      |Player %s: %d
+      |
+      |Player %s has won
+      |""".stripMargin.format(blackPlayer.name, blackScore, whitePlayer.name, whiteScore, winningPlayer.name)
+  }
 }

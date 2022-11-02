@@ -1,10 +1,14 @@
 package de.htwg.msi.model
 
 import de.htwg.msi.model
+import de.htwg.msi.util.Constants.alphabetList
 
 import scala.collection.mutable.ListBuffer
 
 case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players: List[Player]) {
+  def getCurrentPlayer: Player = {
+    if (this.turn % 2 != 0) this.players.head else this.players(1)
+  }
   def initBoard(input: String): List[List[Field]] = {
     val boardSize: Option[Int] = isBoardInputValid(input.trim)
     if (boardSize.isEmpty) {
@@ -35,6 +39,37 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     val isPlayerOne = this.players.isEmpty
     val player: Player = Player(input, if (isPlayerOne) PlayerColor.BLACK else PlayerColor.WHITE)
     this.players.::(player)
+  }
+
+  def getCoordinatesFromInput(input: String): Option[(Int, Int)] = {
+    input.length match
+      case 2 =>
+        val xCoordinate: Int = alphabetList.indexOf(input.charAt(0).toUpper.toString)
+        val yCoordinate: Int = alphabetList.indexOf(input.charAt(1).toUpper.toString)
+        if (xCoordinate < 0 | yCoordinate < 0) return None
+        Some(xCoordinate, yCoordinate)
+      case 4 =>
+        val replaceInput = input.replace("[", "").replace("]", "")
+        val xCoordinate: Int = alphabetList.indexOf(replaceInput.charAt(0).toUpper.toString)
+        val yCoordinate: Int = alphabetList.indexOf(replaceInput.charAt(1).toUpper.toString)
+        if (xCoordinate < 0 | yCoordinate < 0) return None
+        Some(xCoordinate, yCoordinate)
+      case _ => None
+  }
+
+  def isMoveInputValid(input: String): Boolean = {
+    val currentPlayer: Player = getCurrentPlayer
+    val fields: List[Field] = availableMoves(currentPlayer.color)
+    val coordinates: Option[(Int, Int)] = getCoordinatesFromInput(input)
+    if (coordinates.isEmpty) return false
+    fields.exists(f => f.xCoordinate == coordinates.get._1 && f.yCoordinate == coordinates.get._2)
+  }
+
+  def placeStone(input: String): List[List[Field]] = {
+    val currentPlayer: Player = getCurrentPlayer
+    val coordinates: (Int, Int) = getCoordinatesFromInput(input).get
+    val updatedField: Field = this.board(coordinates._2)(coordinates._1).copy(stoneColor = Some(currentPlayer.color))
+    this.board.updated(coordinates._2, this.board(coordinates._2).updated(coordinates._1, updatedField))
   }
 
   def availableMoves(stoneColor: PlayerColor): List[Field] = {
