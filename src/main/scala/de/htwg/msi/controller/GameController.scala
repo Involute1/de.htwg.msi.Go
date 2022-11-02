@@ -160,7 +160,13 @@ case class GameOverState(controller: TGameController, gameData: GameData) extend
     val blackScore = gameData.getScoreOf(PlayerColor.BLACK)
     val blackPlayer = gameData.players.filter(p => p.color == PlayerColor.BLACK).head
     val whitePlayer = gameData.players.filter(p => p.color == PlayerColor.WHITE).head
-    if (whiteScore == blackScore) return """Draw"""
+    if (whiteScore == blackScore) return
+      """
+        |Score
+        |Player %s: %d
+        |Player %s: %d
+        |
+        |Draw""".stripMargin
     val winningPlayer: Player = if (whiteScore > blackScore) whitePlayer else blackPlayer
     """
       |Score
