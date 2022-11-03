@@ -14,18 +14,17 @@ class GameController() extends TGameController {
   }
 
   override def printGameBoard(board: List[List[Field]]): String = {
-    //TODO make it prettier?
-    val header: String = ("0"::alphabetList).slice(0, board.length + 1).mkString(" ")
-    val empty: String = (" " :: List.fill(board.length)("-")).mkString(" ")
-    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + "|" + row.map(field => field.toPrettyString).mkString(" "))
+    val header: String = ("0 " :: alphabetList).slice(0, board.length + 1).mkString("  ")
+    val empty: String = ("  " :: List.fill(board.length)("-")).mkString("  ")
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + " | " + row.map(field => field.toPrettyString).mkString("  "))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 
   override def printActions(playerColor: PlayerColor, currentGameData: GameData): String = {
     "\r\n" + currentGameData.availableMovesAsString(playerColor) +
-    """
-      |Or type forfeit to forfeit
-      |""".stripMargin
+      """
+        |Or type forfeit to forfeit
+        |""".stripMargin
   }
 
   override def updateControllerState(nextState: TControllerState): TControllerState = {
@@ -40,13 +39,15 @@ class GameController() extends TGameController {
 
 trait TControllerState {
   def evaluate(input: String): Option[String]
+
   def nextState(gameData: GameData): TControllerState
+
   def getControllerMessage(): String
 }
 
 case class InitState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    if (input.isEmpty) return Some("Input can´t be empty")
+    if (input.isEmpty) return Some("Input can`t be empty")
     val emptyBoard = gameData.initBoard(input)
     if (emptyBoard.isEmpty) return Some("Please enter a valid Input")
     val gameDataWithGameBoard = gameData.copy(board = emptyBoard)
@@ -75,9 +76,10 @@ case class InitState(controller: TGameController, gameData: GameData) extends TC
       |""".stripMargin
   }
 }
+
 case class PlayerSetupState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    if (input.isEmpty) return Some("Input can´t be empty")
+    if (input.isEmpty) return Some("Input can`t be empty")
     val gameDataWithPlayer = gameData.copy(players = gameData.initPlayer(input))
     if (gameDataWithPlayer.players.length < 2) {
       controller.updateControllerState(this.copy(gameData = gameDataWithPlayer))
@@ -88,6 +90,7 @@ case class PlayerSetupState(controller: TGameController, gameData: GameData) ext
   }
 
   override def nextState(gameData: GameData): TControllerState = PlayingState(controller, gameData)
+
   override def getControllerMessage(): String = {
     """
       |Player %d enter your Name:
@@ -110,6 +113,7 @@ case class PlayingState(controller: TGameController, gameData: GameData) extends
   }
 
   override def nextState(gameData: GameData): TControllerState = ForfeitState(controller, gameData)
+
   override def getControllerMessage(): String = {
     val currentPlayer: Player = gameData.getCurrentPlayer
     controller.printGameBoard(gameData.board) +
@@ -155,6 +159,7 @@ case class GameOverState(controller: TGameController, gameData: GameData) extend
   }
 
   override def nextState(gameData: GameData): TControllerState = this
+
   override def getControllerMessage(): String = {
     val whiteScore = gameData.getScoreOf(PlayerColor.WHITE)
     val blackScore = gameData.getScoreOf(PlayerColor.BLACK)

@@ -9,7 +9,6 @@ def main(args: String*): Unit = {
   val tui: Tui = Tui(controller);
   controller.notifyObservers(None)
   var input: String = "";
-  if (args.nonEmpty) input = args(0);
   while (input != "q") do {
     input = scala.io.StdIn.readLine()
     tui.processInputLine(input)
