@@ -6,7 +6,7 @@ import de.htwg.msi.util.Constants.alphabetList
 class GameController() extends TGameController {
   val gameData: GameData = GameData(Nil, 0, 0, Nil)
   //TODO find way to val this
-  var controllerState: TControllerState = InitState(this, gameData)
+  var controllerState: TControllerState = InitState(this)
 
   override def eval(input: String): Unit = {
     val errorMsg: Option[String] = controllerState.evaluate(input)
@@ -45,7 +45,9 @@ trait TControllerState {
   def getControllerMessage(): String
 }
 
-case class InitState(controller: TGameController, gameData: GameData) extends TControllerState {
+case class InitState(controller: TGameController) extends TControllerState {
+  val gameData: GameData = GameData(Nil, 0, 0, Nil)
+
   override def evaluate(input: String): Option[String] = {
     if (input.isEmpty) return Some("Input can`t be empty")
     val emptyBoard = gameData.initBoard(input)
@@ -155,7 +157,13 @@ case class ForfeitState(controller: TGameController, gameData: GameData) extends
 
 case class GameOverState(controller: TGameController, gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Option[String] = {
-    None
+    if (input.isEmpty) return Some("Input can´t be empty")
+    input match {
+      case "New" | "new" =>
+        controller.updateControllerState(InitState(controller))
+        None
+      case _ => Some("Please type New to start a new game")
+    }
   }
 
   override def nextState(gameData: GameData): TControllerState = this
@@ -171,7 +179,9 @@ case class GameOverState(controller: TGameController, gameData: GameData) extend
         |Player %s: %d
         |Player %s: %d
         |
-        |Draw""".stripMargin
+        |Draw
+        |
+        |Type New to start a new game""".stripMargin.format(blackPlayer.name, blackScore, whitePlayer.name, whiteScore)
     val winningPlayer: Player = if (whiteScore > blackScore) whitePlayer else blackPlayer
     """
       |Score
@@ -179,6 +189,7 @@ case class GameOverState(controller: TGameController, gameData: GameData) extend
       |Player %s: %d
       |
       |Player %s has won
-      |""".stripMargin.format(blackPlayer.name, blackScore, whitePlayer.name, whiteScore, winningPlayer.name)
+      |
+      |Type New to start a new game""".stripMargin.format(blackPlayer.name, blackScore, whitePlayer.name, whiteScore, winningPlayer.name)
   }
 }
