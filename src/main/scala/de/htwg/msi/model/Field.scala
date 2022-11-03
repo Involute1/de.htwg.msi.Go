@@ -24,6 +24,6 @@ case class Field(xCoordinate: Int, yCoordinate: Int, stoneColor: Option[PlayerCo
   }
 
   def toCoordinateString: String = {
-    "[" + alphabetList(this.xCoordinate) + alphabetList(this.yCoordinate) + "]"
+    alphabetList(this.xCoordinate) + alphabetList(this.yCoordinate)
   }
 }

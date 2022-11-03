@@ -9,6 +9,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
   def getCurrentPlayer: Player = {
     if (this.turn % 2 != 0) this.players.head else this.players(1)
   }
+
   def initBoard(input: String): List[List[Field]] = {
     val boardSize: Option[Int] = isBoardInputValid(input.trim)
     if (boardSize.isEmpty) {
@@ -42,19 +43,13 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
   }
 
   def getCoordinatesFromInput(input: String): Option[(Int, Int)] = {
-    input.length match
-      case 2 =>
-        val xCoordinate: Int = alphabetList.indexOf(input.charAt(0).toUpper.toString)
-        val yCoordinate: Int = alphabetList.indexOf(input.charAt(1).toUpper.toString)
-        if (xCoordinate < 0 | yCoordinate < 0) return None
-        Some(xCoordinate, yCoordinate)
-      case 4 =>
-        val replaceInput = input.replace("[", "").replace("]", "")
-        val xCoordinate: Int = alphabetList.indexOf(replaceInput.charAt(0).toUpper.toString)
-        val yCoordinate: Int = alphabetList.indexOf(replaceInput.charAt(1).toUpper.toString)
-        if (xCoordinate < 0 | yCoordinate < 0) return None
-        Some(xCoordinate, yCoordinate)
-      case _ => None
+    if (input.length == 2) {
+      val xCoordinate: Int = alphabetList.indexOf(input.charAt(0).toUpper.toString)
+      val yCoordinate: Int = alphabetList.indexOf(input.charAt(1).toUpper.toString)
+      if (xCoordinate < 0 | yCoordinate < 0) return None
+      return Some(xCoordinate, yCoordinate)
+    }
+    None
   }
 
   def isMoveInputValid(input: String): Boolean = {
@@ -86,7 +81,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
 
   def availableMovesAsString(stoneColor: PlayerColor): String = {
     val movesList: List[Field] = availableMoves(stoneColor)
-    movesList.map(f => f.toCoordinateString).mkString
+    movesList.map(f => f.toCoordinateString).mkString(",")
   }
 
   /**
