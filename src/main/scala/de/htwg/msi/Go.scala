@@ -10,12 +10,8 @@ def main(args: String*): Unit = {
   controller.notifyObservers(None)
   var input: String = "";
   if (args.nonEmpty) input = args(0);
-  if (input.nonEmpty) {
+  while (input != "q") do {
+    input = scala.io.StdIn.readLine()
     tui.processInputLine(input)
-  } else {
-    while (input != "q") do {
-      input = scala.io.StdIn.readLine()
-      tui.processInputLine(input)
-    }
   }
 }
