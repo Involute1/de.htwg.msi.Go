@@ -21,7 +21,7 @@ case class GameController() extends TGameController {
 
   override def updateControllerState(nextState: TControllerState): TControllerState = {
     controllerState = nextState
-    nextState
+    controllerState
   }
 
   override def getControllerState: TControllerState = {
