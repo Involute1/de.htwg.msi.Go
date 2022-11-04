@@ -12,7 +12,7 @@ case class ForfeitState(controller: TGameController, gameData: GameData) extends
         None
       }
       case "n" | "no" => {
-        controller.updateControllerState(PlayingState(controller, gameData))
+        controller.updateControllerState(PlayingState(controller, gameData.copy(turn = gameData.turn + 1)))
         None
       }
       case _ => Some("Please type yes or no")
