@@ -7,8 +7,7 @@ case class GameOverState(controller: TGameController, gameData: GameData) extend
   override def evaluate(input: String): Either[TControllerState, String] = {
     if (input.isEmpty) return Right("Input can´t be empty")
     input match {
-      case "New" | "new" =>
-        Left(InitState(controller))
+      case "New" | "new" => Left(InitState(controller))
       case _ => Right("Please type New to start a new game")
     }
   }
