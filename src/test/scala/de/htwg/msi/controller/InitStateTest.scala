@@ -8,15 +8,15 @@ class InitStateTest extends AnyWordSpec {
   "InitState" should {
     val gameController = GameController()
     val gameData = GameData(Nil, 0, 0, Nil)
-    val initState = InitState(gameController);
+    val initState = InitState(gameController)
     "return error Msg for empty string" in {
-      initState.evaluate("") should be(Some("Input can`t be empty"))
+      initState.evaluate("") should be(Right("Input can`t be empty"))
     }
     "return error Msg for invalid input string" in {
-      initState.evaluate("asd") should be(Some("Please enter a valid Input"))
+      initState.evaluate("asd") should be(Right("Please enter a valid Input"))
     }
     "return no errorMsg for valid input string" in {
-      initState.evaluate("9") should be(None)
+      initState.evaluate("9").left.get shouldBe a[PlayerSetupState]
     }
     "return playerSetupState as next State" in {
       initState.nextState(gameData) should be(PlayerSetupState(gameController, gameData))
