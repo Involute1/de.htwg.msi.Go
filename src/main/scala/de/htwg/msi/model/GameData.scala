@@ -64,7 +64,23 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     val currentPlayer: Player = getCurrentPlayer
     val coordinates: (Int, Int) = getCoordinatesFromInput(input).get
     val updatedField: Field = this.board(coordinates._2)(coordinates._1).copy(stoneColor = Some(currentPlayer.color))
-    this.board.updated(coordinates._2, this.board(coordinates._2).updated(coordinates._1, updatedField))
+    val updatedBoard = this.board.updated(coordinates._2, this.board(coordinates._2).updated(coordinates._1, updatedField))
+    removeStones(updatedField, updatedBoard)
+  }
+
+  def removeStones(updatedField: Field, updatedBoard: List[List[Field]]): List[List[Field]] = {
+    val fieldsToRemove: List[Field] = getNeighbourFields(updatedField, board)
+      .filter(neighbourField => neighbourField.hasStone && neighbourField.stoneColor.get != updatedField.stoneColor.get)
+      .map(neighbourField => findChain(neighbourField, neighbourField.stoneColor.get, updatedBoard))
+      .filter(chain => chain.liberties == 0)
+      .flatMap(chain => chain.set)
+    updatedBoard.map(row => row.map(field => {
+      if (fieldsToRemove.contains(field)) {
+        field.copy(stoneColor = None)
+      } else {
+        field
+      }
+    }))
   }
 
   def availableMoves(stoneColor: PlayerColor): List[Field] = {
@@ -72,8 +88,8 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
       !field.hasStone
     }).filter(field => {
       val otherColor: PlayerColor = if (stoneColor.==(PlayerColor.WHITE)) PlayerColor.BLACK else PlayerColor.WHITE
-      findChain(field, stoneColor).liberties > 0 || getNeighbourFields(field).exists(neighbourField => {
-        neighbourField.stoneColor.get == otherColor && findChain(neighbourField, otherColor).liberties == 1
+      findChain(field, stoneColor, board).liberties > 0 || getNeighbourFields(field, board).exists(neighbourField => {
+        neighbourField.hasStone && neighbourField.stoneColor.get == otherColor && findChain(neighbourField, otherColor, board).liberties == 1
       })
     })
       .sortBy(f => f.xCoordinate)
@@ -91,7 +107,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
    * @param stoneColor   Die Farbe der Startfeldes, falls hier noch kein Stein liegt.
    * @return die gefundene Chain
    */
-  def findChain(initialField: Field, stoneColor: PlayerColor): Chain = {
+  def findChain(initialField: Field, stoneColor: PlayerColor, board: List[List[Field]]): Chain = {
     val chainSet = scala.collection.mutable.Set[Field](initialField)
     val libertiesSet = scala.collection.mutable.Set[Field](initialField)
 
@@ -102,7 +118,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     while {
       newFields = scala.collection.mutable.Set.empty
       currentFields.foreach(field => {
-        val neighbours = getNeighbourFields(field)
+        val neighbours = getNeighbourFields(field, board)
         neighbours.foreach(field => {
           if (!chainSet.contains(field) && field.hasStone && field.stoneColor.get == stoneColor) {
             newFields += field
@@ -119,7 +135,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     Chain(Set.empty ++ chainSet, liberties)
   }
 
-  def getNeighbourFields(field: Field): List[Field] = {
+  def getNeighbourFields(field: Field, board: List[List[Field]]): List[Field] = {
     val neighbours = ListBuffer[Field]()
     val leftCoordinate = field.xCoordinate - 1
     if (leftCoordinate >= 0) {

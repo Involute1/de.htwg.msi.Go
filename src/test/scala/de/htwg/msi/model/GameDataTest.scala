@@ -54,20 +54,24 @@ class GameDataTest extends AnyWordSpec {
       }
     }
     "is has multiple chains" should {
-      val gameData = GameData(List(
-        List(Field(0, 0), Field(1, 0, Some(WHITE)), Field(2, 0, Some(WHITE)), Field(3, 0, Some(WHITE)), Field(4, 0)),
-        List(Field(0, 1, Some(WHITE)), Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)), Field(4, 1, Some(WHITE))),
-        List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
-        List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
-        List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4))),
-        0, 0, Nil)
+      val gameData = GameData(Nil, 0, 0, Nil)
       "return black chain on findChain" in {
-        gameData.findChain(Field(2, 2), BLACK) should be(Chain(Set(Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)),
+        gameData.findChain(Field(2, 2), BLACK, List(
+          List(Field(0, 0), Field(1, 0, Some(WHITE)), Field(2, 0, Some(WHITE)), Field(3, 0, Some(WHITE)), Field(4, 0)),
+          List(Field(0, 1, Some(WHITE)), Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)), Field(4, 1, Some(WHITE))),
+          List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
+          List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
+          List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4)))) should be(Chain(Set(Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)),
           Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)),
           Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK))), 0))
       }
       "return one white chain on findChain" in {
-        gameData.findChain(Field(0, 1, Some(WHITE)), WHITE) should be(Chain(Set(Field(0, 1, Some(WHITE)), Field(0, 2, Some(WHITE)), Field(0, 3, Some(WHITE))), 2))
+        gameData.findChain(Field(0, 1, Some(WHITE)), WHITE, List(
+          List(Field(0, 0), Field(1, 0, Some(WHITE)), Field(2, 0, Some(WHITE)), Field(3, 0, Some(WHITE)), Field(4, 0)),
+          List(Field(0, 1, Some(WHITE)), Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)), Field(4, 1, Some(WHITE))),
+          List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
+          List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
+          List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4)))) should be(Chain(Set(Field(0, 1, Some(WHITE)), Field(0, 2, Some(WHITE)), Field(0, 3, Some(WHITE))), 2))
       }
     }
     "it has a black eye" should {
@@ -135,6 +139,15 @@ class GameDataTest extends AnyWordSpec {
           List(Field(0, 1, Some(WHITE)), Field(1, 1, Some(BLACK)), Field(2, 1, Some(BLACK)), Field(3, 1, Some(BLACK)), Field(4, 1, Some(WHITE))),
           List(Field(0, 2, Some(WHITE)), Field(1, 2, Some(BLACK)), Field(2, 2), Field(3, 2, Some(BLACK)), Field(4, 2, Some(WHITE))),
           List(Field(0, 3, Some(WHITE)), Field(1, 3, Some(BLACK)), Field(2, 3, Some(BLACK)), Field(3, 3, Some(BLACK)), Field(4, 3, Some(WHITE))),
+          List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4)))
+      }
+
+      "remove all necessary stones after a move" in {
+        gameData.placeStone("cc") shouldBe List(
+          List(Field(0, 0), Field(1, 0, Some(WHITE)), Field(2, 0, Some(WHITE)), Field(3, 0, Some(WHITE)), Field(4, 0)),
+          List(Field(0, 1, Some(WHITE)), Field(1, 1), Field(2, 1), Field(3, 1), Field(4, 1, Some(WHITE))),
+          List(Field(0, 2, Some(WHITE)), Field(1, 2), Field(2, 2, Some(WHITE)), Field(3, 2), Field(4, 2, Some(WHITE))),
+          List(Field(0, 3, Some(WHITE)), Field(1, 3), Field(2, 3), Field(3, 3), Field(4, 3, Some(WHITE))),
           List(Field(0, 4), Field(1, 4, Some(WHITE)), Field(2, 4, Some(WHITE)), Field(3, 4, Some(WHITE)), Field(4, 4)))
       }
     }
