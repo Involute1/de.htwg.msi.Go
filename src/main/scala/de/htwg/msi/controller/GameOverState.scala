@@ -4,13 +4,12 @@ import de.htwg.msi.controller.{InitState, TControllerState, TGameController}
 import de.htwg.msi.model.{GameData, Player, PlayerColor}
 
 case class GameOverState(controller: TGameController, gameData: GameData) extends TControllerState {
-  override def evaluate(input: String): Option[String] = {
-    if (input.isEmpty) return Some("Input can´t be empty")
+  override def evaluate(input: String): Either[TControllerState, String] = {
+    if (input.isEmpty) return Right("Input can´t be empty")
     input match {
       case "New" | "new" =>
-        controller.updateControllerState(InitState(controller))
-        None
-      case _ => Some("Please type New to start a new game")
+        Left(InitState(controller))
+      case _ => Right("Please type New to start a new game")
     }
   }
 

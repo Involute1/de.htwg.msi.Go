@@ -5,13 +5,12 @@ import de.htwg.msi.model.GameData
 case class InitState(controller: TGameController) extends TControllerState {
   val gameData: GameData = GameData(Nil, 0, 0, Nil)
 
-  override def evaluate(input: String): Option[String] = {
-    if (input.isEmpty) return Some("Input can`t be empty")
+  override def evaluate(input: String): Either[TControllerState, String] = {
+    if (input.isEmpty) return Right("Input can`t be empty")
     val emptyBoard = gameData.initBoard(input)
-    if (emptyBoard.isEmpty) return Some("Please enter a valid Input")
+    if (emptyBoard.isEmpty) return Right("Please enter a valid Input")
     val gameDataWithGameBoard = gameData.copy(board = emptyBoard)
-    controller.updateControllerState(nextState(gameDataWithGameBoard))
-    None
+    Left(nextState(gameDataWithGameBoard))
   }
 
   override def nextState(gameData: GameData): TControllerState = PlayerSetupState(controller, gameData)

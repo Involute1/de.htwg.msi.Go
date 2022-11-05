@@ -4,18 +4,16 @@ import de.htwg.msi.controller.{GameOverState, TControllerState, TGameController}
 import de.htwg.msi.model.GameData
 
 case class ForfeitState(controller: TGameController, gameData: GameData) extends TControllerState {
-  override def evaluate(input: String): Option[String] = {
-    if (input.isEmpty) return Some("Input can´t be empty")
+  override def evaluate(input: String): Either[TControllerState, String] = {
+    if (input.isEmpty) return Right("Input can´t be empty")
     input match {
       case "y" | "yes" => {
-        controller.updateControllerState(nextState(gameData))
-        None
+        Left(nextState(gameData))
       }
       case "n" | "no" => {
-        controller.updateControllerState(PlayingState(controller, gameData.copy(turn = gameData.turn + 1)))
-        None
+        Left(PlayingState(controller, gameData.copy(turn = gameData.turn + 1)))
       }
-      case _ => Some("Please type yes or no")
+      case _ => Right("Please type yes or no")
     }
   }
 

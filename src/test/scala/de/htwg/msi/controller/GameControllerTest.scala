@@ -35,8 +35,8 @@ class GameControllerTest extends AnyWordSpec {
            |C | w  w  b  w
            |D | w  b  w  w""".stripMargin.trim.replaceAll("\n", "").replaceAll("\r", ""))
     }
-    "return the updated controllerState" in {
-      gameController.updateControllerState(InitState(gameController)) should be(InitState(gameController))
+    "return the current controllerState" in {
+      gameController.getControllerState should be(InitState(gameController))
     }
   }
 }

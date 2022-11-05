@@ -4,16 +4,14 @@ import de.htwg.msi.controller.{TControllerState, TGameController}
 import de.htwg.msi.model.{GameData, Player}
 
 case class PlayingState(controller: TGameController, gameData: GameData) extends TControllerState {
-  override def evaluate(input: String): Option[String] = {
+  override def evaluate(input: String): Either[TControllerState, String] = {
     input match {
       case "forfeit" =>
-        controller.updateControllerState(nextState(gameData))
-        None
+        Left(nextState(gameData))
       case _ =>
-        if (!gameData.isMoveInputValid(input)) return Some("Input invalid try again")
+        if (!gameData.isMoveInputValid(input)) return Right("Input invalid try again")
         val gameDataWithPlacedStone: GameData = gameData.copy(board = gameData.placeStone(input), turn = gameData.turn + 1)
-        controller.updateControllerState(this.copy(gameData = gameDataWithPlacedStone))
-        None
+        Left(this.copy(gameData = gameDataWithPlacedStone))
     }
   }
 

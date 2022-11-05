@@ -8,8 +8,13 @@ case class GameController() extends TGameController {
   var controllerState: TControllerState = InitState(this)
 
   override def eval(input: String): Unit = {
-    val errorMsg: Option[String] = controllerState.evaluate(input)
-    notifyObservers(errorMsg)
+    controllerState.evaluate(input).fold(
+      newState => {
+        controllerState = newState
+        notifyObservers(None)
+      },
+      e => notifyObservers(Option.apply(e)),
+    )
   }
 
   override def printGameBoard(board: List[List[Field]]): String = {
@@ -17,11 +22,6 @@ case class GameController() extends TGameController {
     val empty: String = ("  " :: List.fill(board.length)("-")).mkString("  ")
     val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + " | " + row.map(field => field.toPrettyString).mkString("  "))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
-  }
-
-  override def updateControllerState(nextState: TControllerState): TControllerState = {
-    controllerState = nextState
-    controllerState
   }
 
   override def getControllerState: TControllerState = {

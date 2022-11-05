@@ -8,7 +8,5 @@ trait TGameController() extends Subject[Any] {
 
   def printGameBoard(board: List[List[Field]]): String
 
-  def updateControllerState(nextState: TControllerState): TControllerState
-
   def getControllerState: TControllerState
 }
