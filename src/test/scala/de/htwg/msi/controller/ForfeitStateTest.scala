@@ -8,9 +8,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class ForfeitStateTest extends AnyWordSpec {
   "ForfeitState" should {
-    val gameController = GameController()
     val gameData = GameData(Nil, 0, 0, List(Player("Player1", WHITE), Player("Player2", BLACK)))
-    val forfeitState = ForfeitState(gameController, gameData)
+    val forfeitState = ForfeitState(gameData)
     "return error Msg for empty input" in {
       forfeitState.evaluate("") should be(Right("Input can´t be empty"))
     }
@@ -30,7 +29,7 @@ class ForfeitStateTest extends AnyWordSpec {
       forfeitState.evaluate("123") should be(Right("Please type yes or no"))
     }
     "changes ControllerState to GameOverState" in {
-      forfeitState.nextState(gameData) should be(GameOverState(gameController, gameData))
+      forfeitState.nextState(gameData) should be(GameOverState(gameData))
     }
     "return do you want to forfeit as controller message" in {
       forfeitState.getControllerMessage() should be

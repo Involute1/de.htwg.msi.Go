@@ -3,7 +3,7 @@ package de.htwg.msi.controller
 import de.htwg.msi.controller.{TControllerState, TGameController}
 import de.htwg.msi.model.GameData
 
-case class PlayerSetupState(controller: TGameController, gameData: GameData) extends TControllerState {
+case class PlayerSetupState(gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Either[TControllerState, String] = {
     if (input.isEmpty) return Right("Input can`t be empty")
     val gameDataWithPlayer = gameData.copy(players = gameData.initPlayer(input))
@@ -14,7 +14,7 @@ case class PlayerSetupState(controller: TGameController, gameData: GameData) ext
     }
   }
 
-  override def nextState(gameData: GameData): TControllerState = PlayingState(controller, gameData)
+  override def nextState(gameData: GameData): TControllerState = PlayingState(gameData)
 
   override def getControllerMessage(): String = {
     """

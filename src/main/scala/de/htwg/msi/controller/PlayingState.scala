@@ -1,9 +1,10 @@
 package de.htwg.msi.controller
 
 import de.htwg.msi.controller.{TControllerState, TGameController}
-import de.htwg.msi.model.{GameData, Player}
+import de.htwg.msi.model.{Field, GameData, Player}
+import de.htwg.msi.util.Constants.alphabetList
 
-case class PlayingState(controller: TGameController, gameData: GameData) extends TControllerState {
+case class PlayingState(gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Either[TControllerState, String] = {
     input match {
       case "forfeit" =>
@@ -15,11 +16,11 @@ case class PlayingState(controller: TGameController, gameData: GameData) extends
     }
   }
 
-  override def nextState(gameData: GameData): TControllerState = ForfeitState(controller, gameData)
+  override def nextState(gameData: GameData): TControllerState = ForfeitState(gameData)
 
   override def getControllerMessage(): String = {
     val currentPlayer: Player = gameData.getCurrentPlayer
-    controller.printGameBoard(gameData.board) +
+    printGameBoard(gameData.board) +
       """
         |Player %s enter one of the following:
         |""".stripMargin.format(currentPlayer.name) +
@@ -27,5 +28,12 @@ case class PlayingState(controller: TGameController, gameData: GameData) extends
       """
         |Or type forfeit to forfeit
         |""".stripMargin
+  }
+
+  def printGameBoard(board: List[List[Field]]): String = {
+    val header: String = ("0 " :: alphabetList).slice(0, board.length + 1).mkString("  ")
+    val empty: String = ("  " :: List.fill(board.length)("-")).mkString("  ")
+    val boardAsString: List[String] = board.zipWithIndex.map((row, idx) => alphabetList(idx) + " | " + row.map(field => field.toPrettyString).mkString("  "))
+    header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 }

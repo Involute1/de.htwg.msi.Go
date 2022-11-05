@@ -8,9 +8,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class GameOverStateTest extends AnyWordSpec {
   "GameOverState" should {
-    val gameController = GameController()
     val gameData = GameData(List(List(Field(0, 0, Some(WHITE)), Field(0, 1, Some(BLACK))), List(Field(1, 0, Some(WHITE)), Field(1, 1, Some(BLACK)))), 0, 0, List(Player("Player1", WHITE), Player("Player2", BLACK)))
-    val gameOverState = GameOverState(gameController, gameData)
+    val gameOverState = GameOverState(gameData)
     "return error Msg for empty input" in {
       gameOverState.evaluate("") should be(Right("Input can´t be empty"))
     }
@@ -39,7 +38,7 @@ class GameOverStateTest extends AnyWordSpec {
     }
     "return a draw message in case of a winner as controller message" in {
       val gameDataWinner = GameData(List(List(Field(0, 0, Some(BLACK)), Field(0, 1, Some(BLACK))), List(Field(1, 0, Some(BLACK)), Field(1, 1, Some(BLACK)))), 0, 0, List(Player("Player1", WHITE), Player("Player2", BLACK)))
-      val gameOverStateWinner = GameOverState(gameController, gameDataWinner)
+      val gameOverStateWinner = GameOverState(gameDataWinner)
       gameOverStateWinner.getControllerMessage() should be
       """
         |Score

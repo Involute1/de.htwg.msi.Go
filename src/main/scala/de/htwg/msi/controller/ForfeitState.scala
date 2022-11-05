@@ -3,7 +3,7 @@ package de.htwg.msi.controller
 import de.htwg.msi.controller.{GameOverState, TControllerState, TGameController}
 import de.htwg.msi.model.GameData
 
-case class ForfeitState(controller: TGameController, gameData: GameData) extends TControllerState {
+case class ForfeitState(gameData: GameData) extends TControllerState {
   override def evaluate(input: String): Either[TControllerState, String] = {
     if (input.isEmpty) return Right("Input can´t be empty")
     input match {
@@ -11,13 +11,13 @@ case class ForfeitState(controller: TGameController, gameData: GameData) extends
         Left(nextState(gameData))
       }
       case "n" | "no" => {
-        Left(PlayingState(controller, gameData.copy(turn = gameData.turn + 1)))
+        Left(PlayingState(gameData.copy(turn = gameData.turn + 1)))
       }
       case _ => Right("Please type yes or no")
     }
   }
 
-  override def nextState(gameData: GameData): TControllerState = GameOverState(controller, gameData)
+  override def nextState(gameData: GameData): TControllerState = GameOverState(gameData)
 
   override def getControllerMessage(): String = {
     """

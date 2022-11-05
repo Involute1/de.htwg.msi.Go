@@ -6,9 +6,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class InitStateTest extends AnyWordSpec {
   "InitState" should {
-    val gameController = GameController()
     val gameData = GameData(Nil, 0, 0, Nil)
-    val initState = InitState(gameController)
+    val initState = InitState()
     "return error Msg for empty string" in {
       initState.evaluate("") should be(Right("Input can`t be empty"))
     }
@@ -19,7 +18,7 @@ class InitStateTest extends AnyWordSpec {
       initState.evaluate("9").left.get shouldBe a[PlayerSetupState]
     }
     "return playerSetupState as next State" in {
-      initState.nextState(gameData) should be(PlayerSetupState(gameController, gameData))
+      initState.nextState(gameData) should be(PlayerSetupState(gameData))
     }
     "return all possible board options as controller Message" in {
       initState.getControllerMessage() should be(

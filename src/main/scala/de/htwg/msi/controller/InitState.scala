@@ -2,7 +2,7 @@ package de.htwg.msi.controller
 
 import de.htwg.msi.model.GameData
 
-case class InitState(controller: TGameController) extends TControllerState {
+case class InitState() extends TControllerState {
   val gameData: GameData = GameData(Nil, 0, 0, Nil)
 
   override def evaluate(input: String): Either[TControllerState, String] = {
@@ -13,7 +13,7 @@ case class InitState(controller: TGameController) extends TControllerState {
     Left(nextState(gameDataWithGameBoard))
   }
 
-  override def nextState(gameData: GameData): TControllerState = PlayerSetupState(controller, gameData)
+  override def nextState(gameData: GameData): TControllerState = PlayerSetupState(gameData)
 
   override def getControllerMessage(): String = {
     """
