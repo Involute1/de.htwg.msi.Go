@@ -1,20 +1,27 @@
 package de.htwg.msi.view
 
-import de.htwg.msi.controller.TGameController
-import de.htwg.msi.util.Observer
+import de.htwg.msi.controller.{GameController, InitState, TGameController}
 
-class Tui(controller: TGameController) extends Observer[Any] {
+class Tui {
+  var controller: TGameController = GameController(InitState())
 
-  controller.addObserver(this)
   def processInputLine(input: String): Unit = {
     input match {
       case "q" =>
-      case _ => controller.eval(input)
+      case _ => {
+        controller.eval(input).fold(
+          newController => {
+            controller = newController
+            receiveUpdate(None)
+          },
+          e => receiveUpdate(Option.apply(e))
+        )
+      }
     }
   }
 
-  override def receiveUpdate(subject: Any, errorMsg: Option[String]): Boolean = {
-    if (errorMsg.isDefined) println(Console.RED + errorMsg.get )
+  def receiveUpdate(errorMsg: Option[String]): Boolean = {
+    if (errorMsg.isDefined) println(Console.RED + errorMsg.get)
     println(Console.RESET + controller.getControllerState.getControllerMessage())
     true
   }

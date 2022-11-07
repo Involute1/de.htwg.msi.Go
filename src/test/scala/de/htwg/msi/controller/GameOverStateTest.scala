@@ -41,7 +41,7 @@ class GameOverStateTest extends AnyWordSpec {
       val gameOverStateWinner = GameOverState(gameDataWinner)
       gameOverStateWinner.getControllerMessage() should be
       """
-        |Score
+        |Score  
         |Player Player1: 0
         |Player Player2: 4
         |

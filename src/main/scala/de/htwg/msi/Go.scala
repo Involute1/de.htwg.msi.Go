@@ -5,9 +5,8 @@ import de.htwg.msi.view.Tui
 
 @main
 def main(args: String*): Unit = {
-  val controller: GameController = GameController();
-  val tui: Tui = Tui(controller);
-  controller.notifyObservers(None)
+  val tui: Tui = Tui();
+  tui.receiveUpdate(None)
   var input: String = "";
   while input != "q" do {
     input = scala.io.StdIn.readLine()
