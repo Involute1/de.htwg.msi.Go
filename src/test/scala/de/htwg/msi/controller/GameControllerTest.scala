@@ -13,5 +13,13 @@ class GameControllerTest extends AnyWordSpec {
     "return the current controllerState" in {
       gameController.getControllerState should be(InitState())
     }
+
+    "notify observers with error msg on invalid message" in {
+      gameController.eval("") shouldBe a[Unit]
+    }
+
+    "notify observers with None and update controller State on valid message" in {
+      gameController.eval("9") shouldBe a[Unit]
+    }
   }
 }
