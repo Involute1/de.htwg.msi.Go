@@ -11,3 +11,6 @@ Alle genutzten Spielregeln
 ### Spielende und Bewertung
 * Ein Spiel endet, wenn ein Spieler passt (also keinen Stein legen möchte) und dann sogleich der andere Spieler ebenfalls passt. Daraufhin folgt die Spielbewertung.
 * Es wird die Steinbewertung angewandt, wobei die Anzahl der Steine je Spielfarbe gezählt wird. Die höhere Anzahl gewinnt und ein unentschieden ist möglich.
+### SGF-Files (Smart Game Format)
+* In einem SGF-File werden die Daten eines GO-Spiels dokumentiert. Die Semantik der einzelnen Elemente ist in folgender Ressource zu finden:
+* https://senseis.xmp.net/?SmartGameFormat
