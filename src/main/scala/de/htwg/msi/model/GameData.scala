@@ -1,6 +1,7 @@
 package de.htwg.msi.model
 
 import de.htwg.msi.model
+import de.htwg.msi.model.PlayerColor.{BLACK, WHITE}
 import de.htwg.msi.util.Constants.alphabetList
 
 import scala.collection.mutable.ListBuffer
@@ -64,6 +65,13 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     val currentPlayer: Player = getCurrentPlayer
     val coordinates: (Int, Int) = getCoordinatesFromInput(input).get
     val updatedField: Field = this.board(coordinates._2)(coordinates._1).copy(stoneColor = Some(currentPlayer.color))
+    val updatedBoard = this.board.updated(coordinates._2, this.board(coordinates._2).updated(coordinates._1, updatedField))
+    removeStones(updatedField, updatedBoard)
+  }
+
+  def placeStone(input: String, color: PlayerColor): List[List[Field]] = {
+    val coordinates: (Int, Int) = getCoordinatesFromInput(input).get
+    val updatedField: Field = this.board(coordinates._2)(coordinates._1).copy(stoneColor = Some(color))
     val updatedBoard = this.board.updated(coordinates._2, this.board(coordinates._2).updated(coordinates._1, updatedField))
     removeStones(updatedField, updatedBoard)
   }
@@ -169,6 +177,39 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
       field.stoneColor.contains(color)
     })
   }
+
+  // Internal DSL
+  def sz(input: Int): GameData = {
+    val boardSize: Option[Int] = isBoardInputValid(input.toString)
+    if (boardSize.isEmpty) {
+      this
+    } else {
+      copy(board = List.tabulate(boardSize.get)(y => List.tabulate(boardSize.get)(x => Field(x, y))))
+    }
+  }
+
+  def pw(name: String): GameData = {
+    copy(players = Player(name, PlayerColor.WHITE) :: players)
+  }
+
+  def pb(name: String): GameData = {
+    copy(players = Player(name, PlayerColor.BLACK) :: players)
+  }
+
+  def w(input: String): GameData = {
+    // Forfeit in sgf ist einfach ein leerer Zug
+    if (input.isEmpty) return copy(turn = turn + 1)
+    if (!isMoveInputValid(input)) return this
+    copy(board = placeStone(input, WHITE), turn = turn + 1)
+  }
+
+  def b(input: String): GameData = {
+    // Forfeit in sgf ist einfach ein leerer Zug
+    if (input.isEmpty) return copy(turn = turn + 1)
+    if (!isMoveInputValid(input)) return this
+    copy(board = placeStone(input, BLACK), turn = turn + 1)
+  }
+
 
   /*
   * Recusive aber mit vielen doppelten Aufrufen von Feldern, wodurch liberties nicht direkt berechnet werden können.
