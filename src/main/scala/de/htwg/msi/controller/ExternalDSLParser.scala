@@ -45,9 +45,7 @@ class ExternalDSLParser extends RegexParsers {
   }
 
   private def playerName: Parser[String] = {
-    """^.*?(?=])""".r ^^ {
-      case name => name.substring(0, name.length() - 1)
-    }
+    """^.*?(?=])""".r ^^ (identity)
   }
 
   private def move: Parser[Move] = {
