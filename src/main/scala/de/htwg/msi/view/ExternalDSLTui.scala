@@ -12,7 +12,7 @@ class ExternalDSLTui {
       case "q" =>
       case _ => {
         controller.eval(input).fold(
-          newController => receiveUpdate(None),
+          _ => receiveUpdate(None),
           e => receiveUpdate(Option.apply(e))
         )
       }

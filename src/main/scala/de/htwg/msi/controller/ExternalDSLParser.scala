@@ -17,26 +17,27 @@ class ExternalDSLParser extends RegexParsers {
   }
 
   private def sgfDataParser: Parser[SgfData] = {
-    rep(uselessText) ~
       sgfGameData ~
-      rep(uselessText) ~
+        uselessText(";") ~
       ";" ~ rep1sep(move, ';') ~ ")" ^^ {
-      case _ ~ gameData ~ _ ~ _ ~ moves ~ _ =>
+      case gameData ~ _ ~ _ ~ moves ~ _ =>
         SgfData(gameData, moves)
     }
   }
 
   private def sgfGameData: Parser[SgfGameData] = {
+    uselessText("SZ") ~
     "SZ[" ~ integer ~ "]" ~
-      rep(uselessText) ~
+      uselessText("PW") ~
       "PW[" ~ playerName ~ "]" ~
+      uselessText("PB") ~
       "PB[" ~ playerName ~ "]" ^^ {
-      case _ ~ i ~ _ ~ _ ~ _ ~ pw ~ _ ~ _ ~ pb ~ _ => SgfGameData(i, pw, pb)
+      case _ ~ _ ~ i ~ _ ~ _ ~ _ ~ pw ~ _ ~ _ ~ _ ~ pb ~ _ => SgfGameData(i, pw, pb)
     }
   }
 
-  private def uselessText: Parser[String] = {
-    """.+\s?""".r ^^ (identity)
+  private def uselessText(before: String): Parser[String] = {
+    ("""[\s\S]*?(?="""+before+")").r ^^ (identity)
   }
 
   private def integer: Parser[Int] = {
