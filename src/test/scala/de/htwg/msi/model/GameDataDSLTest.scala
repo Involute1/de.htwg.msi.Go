@@ -1,26 +1,48 @@
 package de.htwg.msi.model
 
+import de.htwg.msi.model
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatest.wordspec.AnyWordSpec
 
 class GameDataDSLTest extends AnyWordSpec {
   "GameDataDSL" when {
-    //    "its using the dsl" should {
-    //      "return a board and two players after calling dslGameData sz 9 pw Player1 pb Player 2" in {
-    //        val gameData = GameData(Nil, 0, 0, Nil)
-    //        gameData sz 9 pw "Player1" pb "Player2" shouldBe GameData(List(List(Field(0, 0, None), Field(1, 0, None), Field(2, 0, None), Field(3, 0, None), Field(4, 0, None), Field(5, 0, None), Field(6, 0, None), Field(7, 0, None), Field(8, 0, None)), List(Field(0, 1, None), Field(1, 1, None), Field(2, 1, None), Field(3, 1, None), Field(4, 1, None), Field(5, 1, None), Field(6, 1, None), Field(7, 1, None), Field(8, 1, None)), List(Field(0, 2, None), Field(1, 2, None), Field(2, 2, None), Field(3, 2, None), Field(4, 2, None), Field(5, 2, None), Field(6, 2, None), Field(7, 2, None), Field(8, 2, None)), List(Field(0, 3, None), Field(1, 3, None), Field(2, 3, None), Field(3, 3, None), Field(4, 3, None), Field(5, 3, None), Field(6, 3, None), Field(7, 3, None), Field(8, 3, None)), List(Field(0, 4, None), Field(1, 4, None), Field(2, 4, None), Field(3, 4, None), Field(4, 4, None), Field(5, 4, None), Field(6, 4, None), Field(7, 4, None), Field(8, 4, None)), List(Field(0, 5, None), Field(1, 5, None), Field(2, 5, None), Field(3, 5, None), Field(4, 5, None), Field(5, 5, None), Field(6, 5, None), Field(7, 5, None), Field(8, 5, None)), List(Field(0, 6, None), Field(1, 6, None), Field(2, 6, None), Field(3, 6, None), Field(4, 6, None), Field(5, 6, None), Field(6, 6, None), Field(7, 6, None), Field(8, 6, None)), List(Field(0, 7, None), Field(1, 7, None), Field(2, 7, None), Field(3, 7, None), Field(4, 7, None), Field(5, 7, None), Field(6, 7, None), Field(7, 7, None), Field(8, 7, None)), List(Field(0, 8, None), Field(1, 8, None), Field(2, 8, None), Field(3, 8, None), Field(4, 8, None), Field(5, 8, None), Field(6, 8, None), Field(7, 8, None), Field(8, 8, None))), 0, 0, List(Player("Player2", BLACK), Player("Player1", WHITE)))
-    //      }
-    //
-    //      "set a stone afer a valid move by black" in {
-    //        val gameData = GameData(List(List(Field(0, 0, None), Field(1, 0, None), Field(2, 0, None), Field(3, 0, None), Field(4, 0, None), Field(5, 0, None), Field(6, 0, None), Field(7, 0, None), Field(8, 0, None)), List(Field(0, 1, None), Field(1, 1, None), Field(2, 1, None), Field(3, 1, None), Field(4, 1, None), Field(5, 1, None), Field(6, 1, None), Field(7, 1, None), Field(8, 1, None)), List(Field(0, 2, None), Field(1, 2, None), Field(2, 2, None), Field(3, 2, None), Field(4, 2, None), Field(5, 2, None), Field(6, 2, None), Field(7, 2, None), Field(8, 2, None)), List(Field(0, 3, None), Field(1, 3, None), Field(2, 3, None), Field(3, 3, None), Field(4, 3, None), Field(5, 3, None), Field(6, 3, None), Field(7, 3, None), Field(8, 3, None)), List(Field(0, 4, None), Field(1, 4, None), Field(2, 4, None), Field(3, 4, None), Field(4, 4, None), Field(5, 4, None), Field(6, 4, None), Field(7, 4, None), Field(8, 4, None)), List(Field(0, 5, None), Field(1, 5, None), Field(2, 5, None), Field(3, 5, None), Field(4, 5, None), Field(5, 5, None), Field(6, 5, None), Field(7, 5, None), Field(8, 5, None)), List(Field(0, 6, None), Field(1, 6, None), Field(2, 6, None), Field(3, 6, None), Field(4, 6, None), Field(5, 6, None), Field(6, 6, None), Field(7, 6, None), Field(8, 6, None)), List(Field(0, 7, None), Field(1, 7, None), Field(2, 7, None), Field(3, 7, None), Field(4, 7, None), Field(5, 7, None), Field(6, 7, None), Field(7, 7, None), Field(8, 7, None)), List(Field(0, 8, None), Field(1, 8, None), Field(2, 8, None), Field(3, 8, None), Field(4, 8, None), Field(5, 8, None), Field(6, 8, None), Field(7, 8, None), Field(8, 8, None))), 0, 0, List(Player("Player2", BLACK), Player("Player1", WHITE)))
-    //        // TODO: aa kann sicher irgendwie ohne die Anführungstriche gemacht werden (siehe class Key aus Markos Beispiel Internal DSL und ihre Verwendung)
-    //        gameData b "aa" shouldBe GameData(List(List(Field(0, 0, Some(BLACK)), Field(1, 0, None), Field(2, 0, None), Field(3, 0, None), Field(4, 0, None), Field(5, 0, None), Field(6, 0, None), Field(7, 0, None), Field(8, 0, None)), List(Field(0, 1, None), Field(1, 1, None), Field(2, 1, None), Field(3, 1, None), Field(4, 1, None), Field(5, 1, None), Field(6, 1, None), Field(7, 1, None), Field(8, 1, None)), List(Field(0, 2, None), Field(1, 2, None), Field(2, 2, None), Field(3, 2, None), Field(4, 2, None), Field(5, 2, None), Field(6, 2, None), Field(7, 2, None), Field(8, 2, None)), List(Field(0, 3, None), Field(1, 3, None), Field(2, 3, None), Field(3, 3, None), Field(4, 3, None), Field(5, 3, None), Field(6, 3, None), Field(7, 3, None), Field(8, 3, None)), List(Field(0, 4, None), Field(1, 4, None), Field(2, 4, None), Field(3, 4, None), Field(4, 4, None), Field(5, 4, None), Field(6, 4, None), Field(7, 4, None), Field(8, 4, None)), List(Field(0, 5, None), Field(1, 5, None), Field(2, 5, None), Field(3, 5, None), Field(4, 5, None), Field(5, 5, None), Field(6, 5, None), Field(7, 5, None), Field(8, 5, None)), List(Field(0, 6, None), Field(1, 6, None), Field(2, 6, None), Field(3, 6, None), Field(4, 6, None), Field(5, 6, None), Field(6, 6, None), Field(7, 6, None), Field(8, 6, None)), List(Field(0, 7, None), Field(1, 7, None), Field(2, 7, None), Field(3, 7, None), Field(4, 7, None), Field(5, 7, None), Field(6, 7, None), Field(7, 7, None), Field(8, 7, None)), List(Field(0, 8, None), Field(1, 8, None), Field(2, 8, None), Field(3, 8, None), Field(4, 8, None), Field(5, 8, None), Field(6, 8, None), Field(7, 8, None), Field(8, 8, None))), 1, 0, List(Player("Player2", BLACK), Player("Player1", WHITE)))
-    //      }
-    //
-    //      "set a stone afer a valid move by white" in {
-    //        val gameData = GameData(List(List(Field(0, 0, None), Field(1, 0, None), Field(2, 0, None), Field(3, 0, None), Field(4, 0, None), Field(5, 0, None), Field(6, 0, None), Field(7, 0, None), Field(8, 0, None)), List(Field(0, 1, None), Field(1, 1, None), Field(2, 1, None), Field(3, 1, None), Field(4, 1, None), Field(5, 1, None), Field(6, 1, None), Field(7, 1, None), Field(8, 1, None)), List(Field(0, 2, None), Field(1, 2, None), Field(2, 2, None), Field(3, 2, None), Field(4, 2, None), Field(5, 2, None), Field(6, 2, None), Field(7, 2, None), Field(8, 2, None)), List(Field(0, 3, None), Field(1, 3, None), Field(2, 3, None), Field(3, 3, None), Field(4, 3, None), Field(5, 3, None), Field(6, 3, None), Field(7, 3, None), Field(8, 3, None)), List(Field(0, 4, None), Field(1, 4, None), Field(2, 4, None), Field(3, 4, None), Field(4, 4, None), Field(5, 4, None), Field(6, 4, None), Field(7, 4, None), Field(8, 4, None)), List(Field(0, 5, None), Field(1, 5, None), Field(2, 5, None), Field(3, 5, None), Field(4, 5, None), Field(5, 5, None), Field(6, 5, None), Field(7, 5, None), Field(8, 5, None)), List(Field(0, 6, None), Field(1, 6, None), Field(2, 6, None), Field(3, 6, None), Field(4, 6, None), Field(5, 6, None), Field(6, 6, None), Field(7, 6, None), Field(8, 6, None)), List(Field(0, 7, None), Field(1, 7, None), Field(2, 7, None), Field(3, 7, None), Field(4, 7, None), Field(5, 7, None), Field(6, 7, None), Field(7, 7, None), Field(8, 7, None)), List(Field(0, 8, None), Field(1, 8, None), Field(2, 8, None), Field(3, 8, None), Field(4, 8, None), Field(5, 8, None), Field(6, 8, None), Field(7, 8, None), Field(8, 8, None))), 0, 0, List(Player("Player2", BLACK), Player("Player1", WHITE)))
-    //        // TODO: aa kann sicher irgendwie ohne die Anführungstriche gemacht werden (siehe class Key aus Markos Beispiel Internal DSL und ihre Verwendung)
-    //        gameData w "aa" shouldBe GameData(List(List(Field(0, 0, Some(WHITE)), Field(1, 0, None), Field(2, 0, None), Field(3, 0, None), Field(4, 0, None), Field(5, 0, None), Field(6, 0, None), Field(7, 0, None), Field(8, 0, None)), List(Field(0, 1, None), Field(1, 1, None), Field(2, 1, None), Field(3, 1, None), Field(4, 1, None), Field(5, 1, None), Field(6, 1, None), Field(7, 1, None), Field(8, 1, None)), List(Field(0, 2, None), Field(1, 2, None), Field(2, 2, None), Field(3, 2, None), Field(4, 2, None), Field(5, 2, None), Field(6, 2, None), Field(7, 2, None), Field(8, 2, None)), List(Field(0, 3, None), Field(1, 3, None), Field(2, 3, None), Field(3, 3, None), Field(4, 3, None), Field(5, 3, None), Field(6, 3, None), Field(7, 3, None), Field(8, 3, None)), List(Field(0, 4, None), Field(1, 4, None), Field(2, 4, None), Field(3, 4, None), Field(4, 4, None), Field(5, 4, None), Field(6, 4, None), Field(7, 4, None), Field(8, 4, None)), List(Field(0, 5, None), Field(1, 5, None), Field(2, 5, None), Field(3, 5, None), Field(4, 5, None), Field(5, 5, None), Field(6, 5, None), Field(7, 5, None), Field(8, 5, None)), List(Field(0, 6, None), Field(1, 6, None), Field(2, 6, None), Field(3, 6, None), Field(4, 6, None), Field(5, 6, None), Field(6, 6, None), Field(7, 6, None), Field(8, 6, None)), List(Field(0, 7, None), Field(1, 7, None), Field(2, 7, None), Field(3, 7, None), Field(4, 7, None), Field(5, 7, None), Field(6, 7, None), Field(7, 7, None), Field(8, 7, None)), List(Field(0, 8, None), Field(1, 8, None), Field(2, 8, None), Field(3, 8, None), Field(4, 8, None), Field(5, 8, None), Field(6, 8, None), Field(7, 8, None), Field(8, 8, None))), 1, 0, List(Player("Player2", BLACK), Player("Player1", WHITE)))
-    //      }
-    //    }
+    val gameData: GameData = GameData(Nil, 0, 0, Nil)
+        "its using the internal dsl" should {
+          "return a board with size 9 after calling boardSizeIs 9" in {
+            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            val expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
+            gameDataDSL boardSizeIs 9 shouldBe expectedGameData
+          }
+          "return a PlayerList with 1 white Player" in {
+            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            val expectedGameData: GameData = GameData(Nil, 0, 0, Player("foo", PlayerColor.WHITE)::Nil)
+            gameDataDSL playerWhiteIs "foo" shouldBe expectedGameData
+          }
+          "return a PlayerList with 1 black Player" in {
+            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            val expectedGameData: GameData = GameData(Nil, 0, 0, Player("foo", PlayerColor.BLACK) :: Nil)
+            gameDataDSL playerBlackIs "foo" shouldBe expectedGameData
+          }
+          "should place a black stone on the board" in {
+            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            var expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
+            expectedGameData = expectedGameData.copy(board = expectedGameData.placeStone("AA", PlayerColor.BLACK))
+            gameDataDSL boardSizeIs 9
+            gameDataDSL playerBlackIs "blackFoo"
+            gameDataDSL playerWhiteIs "whiteFoo"
+            gameDataDSL blackPlaceStoneAt "AA"
+            gameDataDSL.gameData.board shouldBe expectedGameData.board
+          }
+          "should place a white stone on the board" in {
+            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            var expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
+            expectedGameData = expectedGameData.copy(board = expectedGameData.placeStone("AA", PlayerColor.WHITE))
+            gameDataDSL boardSizeIs 9
+            gameDataDSL playerBlackIs "blackFoo"
+            gameDataDSL playerWhiteIs "whiteFoo"
+            gameDataDSL whitePlaceStoneAt "AA"
+            gameDataDSL.gameData.board shouldBe expectedGameData.board
+          }
+        }
   }
 }
