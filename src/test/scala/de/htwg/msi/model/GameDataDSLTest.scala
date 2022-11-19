@@ -9,22 +9,22 @@ class GameDataDSLTest extends AnyWordSpec {
     val gameData: GameData = GameData(Nil, 0, 0, Nil)
         "its using the internal dsl" should {
           "return a board with size 9 after calling boardSizeIs 9" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             val expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
             gameDataDSL boardSizeIs 9 shouldBe expectedGameData
           }
           "return a PlayerList with 1 white Player" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             val expectedGameData: GameData = GameData(Nil, 0, 0, Player("foo", PlayerColor.WHITE)::Nil)
             gameDataDSL playerWhiteIs "foo" shouldBe expectedGameData
           }
           "return a PlayerList with 1 black Player" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             val expectedGameData: GameData = GameData(Nil, 0, 0, Player("foo", PlayerColor.BLACK) :: Nil)
             gameDataDSL playerBlackIs "foo" shouldBe expectedGameData
           }
           "should place a black stone on the board" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             var expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
             expectedGameData = expectedGameData.copy(board = expectedGameData.placeStone("AA", PlayerColor.BLACK))
             gameDataDSL boardSizeIs 9
@@ -34,7 +34,7 @@ class GameDataDSLTest extends AnyWordSpec {
             gameDataDSL.gameData.board shouldBe expectedGameData.board
           }
           "should place a white stone on the board" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             var expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
             expectedGameData = expectedGameData.copy(board = expectedGameData.placeStone("AA", PlayerColor.WHITE))
             gameDataDSL boardSizeIs 9
@@ -44,8 +44,8 @@ class GameDataDSLTest extends AnyWordSpec {
             gameDataDSL.gameData.board shouldBe expectedGameData.board
           }
           "should forfeit on empty place" in {
-            implicit val gameDataDSL: GameDataDSL = new GameDataDSL()
-            var expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
+            val expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
             gameDataDSL boardSizeIs 9
             gameDataDSL playerBlackIs "blackFoo"
             gameDataDSL playerWhiteIs "whiteFoo"

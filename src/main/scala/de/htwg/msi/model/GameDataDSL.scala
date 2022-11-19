@@ -4,7 +4,6 @@ import de.htwg.msi.model.PlayerColor.{BLACK, WHITE}
 import de.htwg.msi.model.GameData.*
 
 class GameDataDSL() {
-  
   var gameData: GameData = GameData(Nil, 0, 0, Nil)
   def sz(input: Int): GameData = {
     gameData = gameData.copy(board = gameData.initBoard(input.toString))
