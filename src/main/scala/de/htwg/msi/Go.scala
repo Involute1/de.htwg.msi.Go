@@ -7,6 +7,7 @@ import de.htwg.msi.view.{ExternalDSLTui, Tui}
 @main
 def main(args: String*): Unit = {
   val actorSystem: ActorSystem = ActorSystem("GoActorSystem")
+  //TODO 1 actor as a turn save service
   var input: String = ""
   if (args.nonEmpty) input = args(0)
   if (input == "DSL") {
