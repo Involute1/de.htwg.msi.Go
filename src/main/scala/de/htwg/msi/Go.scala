@@ -1,10 +1,12 @@
 package de.htwg.msi
 
+import akka.actor.ActorSystem
 import de.htwg.msi.controller.{GameController, InitState}
 import de.htwg.msi.view.{ExternalDSLTui, Tui}
 
 @main
 def main(args: String*): Unit = {
+  val actorSystem: ActorSystem = ActorSystem("GoActorSystem")
   var input: String = ""
   if (args.nonEmpty) input = args(0)
   if (input == "DSL") {
