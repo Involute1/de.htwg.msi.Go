@@ -43,13 +43,22 @@ class GameDataDSLTest extends AnyWordSpec {
             gameDataDSL whitePlaceStoneAt "AA"
             gameDataDSL.gameData.board shouldBe expectedGameData.board
           }
-          "should forfeit on empty place" in {
+          "should black forfeit on empty place" in {
             implicit val gameDataDSL: GameDataDSL = GameDataDSL()
             val expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
             gameDataDSL boardSizeIs 9
             gameDataDSL playerBlackIs "blackFoo"
             gameDataDSL playerWhiteIs "whiteFoo"
             gameDataDSL blackPlaceStoneAt ""
+            gameDataDSL.gameData.board shouldBe expectedGameData.board
+          }
+          "should white forfeit on empty place" in {
+            implicit val gameDataDSL: GameDataDSL = GameDataDSL()
+            val expectedGameData: GameData = GameData(gameData.initBoard("9"), 0, 0, Nil)
+            gameDataDSL boardSizeIs 9
+            gameDataDSL playerBlackIs "blackFoo"
+            gameDataDSL playerWhiteIs "whiteFoo"
+            gameDataDSL whitePlaceStoneAt ""
             gameDataDSL.gameData.board shouldBe expectedGameData.board
           }
         }
