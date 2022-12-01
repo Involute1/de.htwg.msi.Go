@@ -1,7 +1,5 @@
 package de.htwg.msi.controller
 
-import akka.NotUsed
-import akka.stream.scaladsl.{Flow, RunnableGraph, Sink, Source}
 import de.htwg.msi.model.SgfData
 import de.htwg.msi.util.Constants
 
@@ -9,14 +7,18 @@ import java.nio.file.{FileSystems, Files, Path}
 import java.util.stream
 import scala.jdk.StreamConverters.*
 
-case class SgfDataStream(externalDSLParser: ExternalDSLParser, dir: String, sink: Sink[SgfData, NotUsed]){
+import akka.NotUsed
+import akka.stream.Materializer
+import akka.stream.scaladsl.{Flow, RunnableGraph, Sink, Source}
 
-  def getGraph: RunnableGraph[NotUsed] = {
-    
+
+case class SgfDataStream[T](externalDSLParser: ExternalDSLParser, dir: String, sink: Sink[SgfData, T], materializer: Materializer){
+
+  def getResult: T = {
     val path: Path = FileSystems.getDefault.getPath(dir)
     val sgfFiles: List[Path] = Files.list(path).toScala(List)
       .filter(file => Files.isRegularFile(file))
-      .filter(file => file.endsWith(Constants.sgfFileExtension))
+      .filter(file => file.getFileName.toString.matches(Constants.sgfFileExtensionRegex))
 
     val sgfFileSource: Source[Path, NotUsed] = Source(sgfFiles)
 
@@ -26,7 +28,7 @@ case class SgfDataStream(externalDSLParser: ExternalDSLParser, dir: String, sink
       .filter(_.isLeft)
       .map(_.left.toOption.get)
 
-    sgfFileSource.via(sgfFileTextExtraction).via(sgfDataExtraction).to(sink)
+    sgfFileSource.via(sgfFileTextExtraction).via(sgfDataExtraction).runWith(sink)(materializer)
 
   }
 
