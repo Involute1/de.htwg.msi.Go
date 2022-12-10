@@ -1,6 +1,7 @@
 package de.htwg.msi.controller
 
 import akka.actor.Actor
+import akka.pattern.StatusReply.Error
 import de.htwg.msi.model.{Field, GameData, Player, PlayerColor}
 import de.htwg.msi.util.Constants.alphabetList
 

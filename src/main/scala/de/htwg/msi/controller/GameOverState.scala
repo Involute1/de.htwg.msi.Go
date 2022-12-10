@@ -19,8 +19,7 @@ case class GameOverState(gameData: GameData) extends TControllerState {
     val blackScore = gameData.getScoreOf(PlayerColor.BLACK)
     val blackPlayer = gameData.players.filter(p => p.color == PlayerColor.BLACK).head
     val whitePlayer = gameData.players.filter(p => p.color == PlayerColor.WHITE).head
-    if (whiteScore == blackScore) return
-      """
+    if (whiteScore == blackScore) return """
         |Score
         |Player %s: %d
         |Player %s: %d

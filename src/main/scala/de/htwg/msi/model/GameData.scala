@@ -1,7 +1,7 @@
 package de.htwg.msi.model
 
 import de.htwg.msi.model
-import de.htwg.msi.model.PlayerColor.{BLACK, WHITE}
+import de.htwg.msi.model.PlayerColor.{BLACK, PlayerColor, WHITE}
 import de.htwg.msi.util.Constants.alphabetList
 
 import scala.collection.mutable.ListBuffer
@@ -123,7 +123,7 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
     var newFields: scala.collection.mutable.Set[Field] = scala.collection.mutable.Set[Field]()
     var liberties = 0
 
-    while {
+    do {
       newFields = scala.collection.mutable.Set.empty
       currentFields.foreach(field => {
         val neighbours = getNeighbourFields(field, board)
@@ -138,8 +138,8 @@ case class GameData(board: List[List[Field]], turn: Int, playTime: Int, players:
         })
       })
       currentFields = newFields
-      newFields.nonEmpty
-    } do ()
+    } while (newFields.nonEmpty)
+
     Chain(Set.empty ++ chainSet, liberties)
   }
 

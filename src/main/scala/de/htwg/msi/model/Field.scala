@@ -1,5 +1,6 @@
 package de.htwg.msi.model
 
+import de.htwg.msi.model.PlayerColor.PlayerColor
 import de.htwg.msi.util.Constants.alphabetList
 
 case class Field(xCoordinate: Int, yCoordinate: Int, stoneColor: Option[PlayerColor] = None) {
@@ -17,7 +18,7 @@ case class Field(xCoordinate: Int, yCoordinate: Int, stoneColor: Option[PlayerCo
 
   def toPrettyString: String = {
     if (this.hasStone) {
-      this.stoneColor.get.shortText
+      this.stoneColor.get.toString
     } else {
       "O"
     }

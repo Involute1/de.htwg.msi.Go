@@ -1,7 +1,6 @@
 package de.htwg.msi.model
 
 import de.htwg.msi.model.PlayerColor.{BLACK, WHITE}
-import de.htwg.msi.model.GameData.*
 
 class GameDataDSL() {
   var gameData: GameData = GameData(Nil, 0, 0, Nil)

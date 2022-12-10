@@ -1,10 +1,10 @@
 package de.htwg.msi.view
 
-import de.htwg.msi.controller.*
+import de.htwg.msi.controller.{ExternalDSLController, ExternalDSLParser, TGameController}
 import de.htwg.msi.model.{SgfData, SgfGameData}
 
 class ExternalDSLTui {
-  val parser: ExternalDSLParser = ExternalDSLParser()
+  val parser: ExternalDSLParser = new ExternalDSLParser()
   val controller: TGameController = ExternalDSLController(parser, SgfData(SgfGameData(0, "", ""), Nil))
 
   def processInputLine(input: String): Unit = {

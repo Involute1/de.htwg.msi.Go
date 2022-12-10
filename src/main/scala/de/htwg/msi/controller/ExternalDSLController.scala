@@ -1,6 +1,6 @@
 package de.htwg.msi.controller
 
-import de.htwg.msi.model.*
+import de.htwg.msi.model.{SgfData}
 import de.htwg.msi.util.Constants.alphabetList
 
 import scala.io.Source
