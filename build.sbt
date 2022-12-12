@@ -11,8 +11,9 @@ lazy val root = (project in file("."))
   .settings(
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % "test",
-    libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1" ,
+    libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
     libraryDependencies += "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
-    libraryDependencies += "org.apache.kafka" %% "kafka" % "3.3.1"
+    libraryDependencies += "org.apache.kafka" %% "kafka" % "3.3.1",
+    libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion
   )
 
