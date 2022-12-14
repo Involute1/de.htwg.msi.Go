@@ -14,6 +14,8 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
     libraryDependencies += "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
     libraryDependencies += "org.apache.kafka" %% "kafka" % "3.3.1",
-    libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion
+    libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
+    libraryDependencies += "com.typesafe.akka" %% "akka-stream-kafka" % "4.0.0",
+    libraryDependencies += "com.typesafe.akka" %% "akka-discovery" % AkkaVersion
   )
 
