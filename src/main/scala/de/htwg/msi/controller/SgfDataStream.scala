@@ -1,6 +1,6 @@
 package de.htwg.msi.controller
 
-import akka.NotUsed
+import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.{DiscoverySupport, Producer}
@@ -13,12 +13,13 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 
 import java.nio.file.{FileSystems, Files, Path}
+import scala.concurrent.Future
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 
-case class SgfDataStream[T](externalDSLParser: ExternalDSLParser, dir: String, sink: Sink[SgfData, T], materializer: Materializer) {
+case class SgfDataStream(dir: String, materializer: Materializer) {
 
-  def getResult = {
+  def toKafka: Future[Done] = {
     val path: Path = FileSystems.getDefault.getPath(dir)
     val sgfFiles: List[Path] = Files.list(path)
       .filter(file => Files.isRegularFile(file))
@@ -28,10 +29,6 @@ case class SgfDataStream[T](externalDSLParser: ExternalDSLParser, dir: String, s
     val sgfFileSource: Source[Path, NotUsed] = Source(sgfFiles)
 
     val sgfFileTextExtraction: Flow[Path, String, NotUsed] = Flow.fromFunction(path => Files.readString(path))
-
-    val sgfDataExtraction: Flow[String, SgfData, NotUsed] = Flow.fromFunction(fileText => externalDSLParser.parseDSL(fileText))
-      .filter(_.isLeft)
-      .map(_.left.toOption.get)
 
 
     val discoveryConfigSection =
@@ -60,7 +57,10 @@ case class SgfDataStream[T](externalDSLParser: ExternalDSLParser, dir: String, s
     val settings = ProducerSettings(producerConfig, new StringSerializer, new StringSerializer)
       .withEnrichAsync(DiscoverySupport.producerBootstrapServers(producerConfig))
 
-    sgfFileSource.via(sgfFileTextExtraction).via(sgfDataExtraction).map(value => value.toString).map(value => new ProducerRecord[String, String]("GameData", value))
+
+    sgfFileSource
+      .via(sgfFileTextExtraction)
+      .map(value => new ProducerRecord[String, String]("GameData", value))
       .runWith(Producer.plainSink(settings))(materializer)
   }
 

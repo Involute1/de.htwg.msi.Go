@@ -13,14 +13,12 @@ import scala.concurrent.duration.Duration
 
 class SgfDataStreamTest extends AnyWordSpec {
   "SgfDataStream".should({
-    val testParser = new ExternalDSLParser
-    val dir = "src/test/resources/sgf"
-    val sinkToFutureSeq = Sink.seq[SgfData]
+    val dir = ""
     implicit val materializer = Materializer.createMaterializer(ActorSystem("SgfStreamTest"))
-    val testDataStream = SgfDataStream(testParser, dir, sinkToFutureSeq, materializer)
-    val result = Await.result(testDataStream.getResult, Duration.Inf)
+    val testDataStream = SgfDataStream(dir, materializer)
+    val result = Await.result(testDataStream.toKafka, Duration.Inf)
 
-    "read one valid sgfData object from a path with one valid, one invalid and a non sgf-file" in {
+    "return Done when kafka is running correctly" in {
       result.toString mustBe "Done"
     }
   })
