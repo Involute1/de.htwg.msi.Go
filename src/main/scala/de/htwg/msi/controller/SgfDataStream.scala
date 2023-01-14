@@ -8,7 +8,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.typesafe.config.ConfigFactory
 import de.htwg.msi.model.SgfData
-import de.htwg.msi.util.Constants
+import de.htwg.msi.util.{Constants, FileHandling}
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 
@@ -20,11 +20,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 case class SgfDataStream(dir: String, materializer: Materializer) {
 
   def toKafka: Future[Done] = {
-    val path: Path = FileSystems.getDefault.getPath(dir)
-    val sgfFiles: List[Path] = Files.list(path)
-      .filter(file => Files.isRegularFile(file))
-      .filter(file => file.getFileName.toString.matches(Constants.sgfFileExtensionRegex))
-      .toList.asScala.toList
+    val sgfFiles = FileHandling.getFileListFrom(dir)
 
     val sgfFileSource: Source[Path, NotUsed] = Source(sgfFiles)
 

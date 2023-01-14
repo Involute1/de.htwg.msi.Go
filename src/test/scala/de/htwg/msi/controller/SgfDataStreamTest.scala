@@ -13,7 +13,7 @@ import scala.concurrent.duration.Duration
 
 class SgfDataStreamTest extends AnyWordSpec {
   "SgfDataStream".should({
-    val dir = ""
+    val dir = "src/test/resources/sgf"
     implicit val materializer = Materializer.createMaterializer(ActorSystem("SgfStreamTest"))
     val testDataStream = SgfDataStream(dir, materializer)
     val result = Await.result(testDataStream.toKafka, Duration.Inf)
