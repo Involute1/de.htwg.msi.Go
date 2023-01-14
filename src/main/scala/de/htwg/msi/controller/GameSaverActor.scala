@@ -16,19 +16,19 @@ class GameSaverActor extends Actor {
 
   var file: File = new File("")
   var fileWriter: Option[FileWriter] = None
-  var turn = 0;
+  var turn = 0
 
   def receive: Receive = {
     case NewGame(fileName: String) =>
-      file = new File(fileName);
-      fileWriter = Some(new FileWriter(file));
+      file = new File(fileName)
+      fileWriter = Some(new FileWriter(file))
       fileWriter.get.write("(;")
     case Size(input: String) =>
       if (fileWriter.isDefined) fileWriter.get.write("SZ[" + input + "]\r\n")
     case PlayerW(input: String) =>
       if (fileWriter.isDefined) fileWriter.get.write("PW[" + input + "]\r\n")
     case PlayerB(input: String) =>
-      if (fileWriter.isDefined) fileWriter.get.write("PW[" + input + "]\r\n")
+      if (fileWriter.isDefined) fileWriter.get.write("PB[" + input + "]\r\n")
     case Move(move: String) =>
       if (fileWriter.isDefined) {
         var player = "B"
