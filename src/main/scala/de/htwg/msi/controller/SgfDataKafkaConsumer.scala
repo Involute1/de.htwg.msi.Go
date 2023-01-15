@@ -1,10 +1,13 @@
 package de.htwg.scala.kafka
 
+import de.htwg.msi.controller.ExternalDSLParser
+import de.htwg.msi.util.SparkUtil
 import org.apache.kafka.clients.consumer.KafkaConsumer
 
 import java.util
 import java.util.Properties
 import scala.collection.JavaConverters._
+import scala.util.control.Breaks.{break, breakable}
 
 object SgfDataKafkaConsumer extends App {
 
@@ -19,11 +22,51 @@ object SgfDataKafkaConsumer extends App {
 
   consumer.subscribe(util.Collections.singletonList(TOPIC))
 
+  val spark = SparkUtil.getSparkSession
+  val parser = new ExternalDSLParser
+
   while (true) {
-    println("Polling..")
-    val records = consumer.poll(100)
-    for (record <- records.asScala) {
-      println(record)
+    //    println("Polling..")
+    val records = consumer.poll(java.time.Duration.ofSeconds(1))
+    val recordValues = records.asScala.toList.map(record => record.value())
+
+    import spark.implicits._
+    breakable {
+      if(recordValues.isEmpty) break
+
+      val sgfDataSet = spark.createDataset(recordValues)
+        .map(content => parser.parseDSL(content))
+        .filter(parsedFile => parsedFile.isLeft)
+        .map(parsedFile => parsedFile.left.get)
+
+      //    sgfDataSet.show()
+
+      //    val count = sgfDataSet.count()
+
+      val basicStatsMoves = sgfDataSet
+        .map(sgfData => sgfData.moves.size)
+        .summary()
+
+      val boardSizeUsage = sgfDataSet.map(sgfData => (sgfData.gameData.size, 1))
+        .groupBy($"_1").count()
+        .sort($"count".desc)
+
+      val whitePlayers = sgfDataSet.map(sgfData => sgfData.gameData.pw)
+      val blackPlayers = sgfDataSet.map(sgfData => sgfData.gameData.pb)
+      val playerMatchCount = blackPlayers
+        .union(whitePlayers)
+        .map(player => (player, 1))
+        .groupBy($"_1").count()
+        .sort($"count".desc)
+
+
+      basicStatsMoves.show()
+      boardSizeUsage.show()
+      playerMatchCount.show()
     }
+
+//    for (record <- records.asScala) {
+//      println(record)
+//    }
   }
 }
