@@ -26,7 +26,6 @@ object SgfDataKafkaConsumer extends App {
   val parser = new ExternalDSLParser
 
   while (true) {
-    //    println("Polling..")
     val records = consumer.poll(java.time.Duration.ofSeconds(1))
     val recordValues = records.asScala.toList.map(record => record.value())
 
@@ -38,10 +37,6 @@ object SgfDataKafkaConsumer extends App {
         .map(content => parser.parseDSL(content))
         .filter(parsedFile => parsedFile.isLeft)
         .map(parsedFile => parsedFile.left.get)
-
-      //    sgfDataSet.show()
-
-      //    val count = sgfDataSet.count()
 
       val basicStatsMoves = sgfDataSet
         .map(sgfData => sgfData.moves.size)
@@ -65,6 +60,8 @@ object SgfDataKafkaConsumer extends App {
       playerMatchCount.show()
     }
 
+//    println("Polling..")
+//    val records = consumer.poll(100)
 //    for (record <- records.asScala) {
 //      println(record)
 //    }
