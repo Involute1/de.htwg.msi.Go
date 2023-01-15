@@ -17,8 +17,10 @@ object SparkExample {
       .map(content => parser.parseDSL(content))
       .filter(parsedFile => parsedFile.isLeft)
       .map(parsedFile => parsedFile.left)
-
-    println(result.count())
+    //adding below count throws IllegalAccessError
+      .count()
+//
+    println(result)
 
 
 //    val logData = spark.read.textFile("./README.md").cache()

@@ -5,7 +5,7 @@ import de.htwg.msi.util.Constants.alphabetList
 
 import scala.util.parsing.combinator.RegexParsers
 
-class ExternalDSLParser extends RegexParsers {
+class ExternalDSLParser extends RegexParsers with Serializable{
 
   def parseDSL(input: String): Either[SgfData, String] = {
     parseAll(sgfDataParser, input) match {
