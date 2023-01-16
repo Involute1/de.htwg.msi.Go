@@ -23,6 +23,7 @@ object SgfDataKafkaConsumer extends App {
   consumer.subscribe(util.Collections.singletonList(TOPIC))
 
   val spark = SparkUtil.getSparkSession
+  spark.sparkContext.setLogLevel("WARN")
   val parser = new ExternalDSLParser
 
   while (true) {

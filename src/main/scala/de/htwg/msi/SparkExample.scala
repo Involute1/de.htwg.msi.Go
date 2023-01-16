@@ -7,6 +7,7 @@ import org.apache.spark.sql.SparkSession
 object SparkExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkUtil.getSparkSession
+    spark.sparkContext.setLogLevel("WARN")
 
     val dir = Constants.massiveSgfFileLocation
     val fileContents = FileHandling.getFilesContentFrom(dir)
