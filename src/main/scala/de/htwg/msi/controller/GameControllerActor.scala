@@ -1,9 +1,7 @@
 package de.htwg.msi.controller
 
 import akka.actor.{Actor, ActorRef}
-import de.htwg.msi.controller.GameSaverActor.{GameOver, Move, NewGame, PlayerB, PlayerW, Size}
-import de.htwg.msi.model.{Field, GameData, Player, PlayerColor}
-import de.htwg.msi.util.Constants.alphabetList
+import de.htwg.msi.controller.GameSaverActor._
 
 class GameControllerActor(gameSaver: ActorRef) extends Actor {
 
@@ -47,7 +45,10 @@ class GameControllerActor(gameSaver: ActorRef) extends Actor {
         }
       case _: ForfeitState =>
         newState match {
-          case _: GameOverState => gameSaver ! GameOver
+          case _: GameOverState => {
+            gameSaver ! Move("")
+            gameSaver ! GameOver
+          }
         }
     }
   }
