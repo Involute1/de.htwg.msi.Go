@@ -19,7 +19,7 @@ object SparkExample {
       .filter(parsedFile => parsedFile.isLeft)
       .map(parsedFile => parsedFile.left.get)
 
-//    sgfDataSet.show()
+    sgfDataSet.show()
 
 //    val count = sgfDataSet.count()
 

@@ -33,7 +33,7 @@ case class PlayingState(gameData: GameData) extends TControllerState {
   def printGameBoard(board: List[List[Field]]): String = {
     val header: String = ("0 " :: alphabetList).slice(0, board.length + 1).mkString("  ")
     val empty: String = ("  " :: List.fill(board.length)("-")).mkString("  ")
-    val boardAsString: List[String] = board.zipWithIndex.map(row => alphabetList(row._2) + " | " + row._1.map(field => field.toPrettyString).mkString(" "))
+    val boardAsString: List[String] = board.zipWithIndex.map(row => alphabetList(row._2) + " | " + row._1.map(field => field.toPrettyString).mkString("  "))
     header + " \r\n" + empty + " \r\n" + boardAsString.mkString("\r\n")
   }
 }
